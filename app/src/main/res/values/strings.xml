@@ -2,8 +2,7 @@
     <string name="app_name">Mon Bon Plan</string>
     <string name="chooseDateText">Choose a date</string>
     <string name="chooseDateButton">Choose</string>
-    <string name="title_activity_note_edit">NoteEditActivity</string>
-    <string name="firstname">firstname</string>
+    <string name="title">Title</string>
     <string name="lastname">lastname</string>
     <string name="number">6123456789</string>
     <string name="age">age</string>

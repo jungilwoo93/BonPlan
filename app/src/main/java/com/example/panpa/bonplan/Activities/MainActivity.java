@@ -1,4 +1,4 @@
-package com.example.panpa.bonplan;
+package com.example.panpa.bonplan.Activities;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -9,9 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.panpa.bonplan.R;
+
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 

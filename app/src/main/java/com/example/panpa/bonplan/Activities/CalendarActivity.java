@@ -1,4 +1,4 @@
-package com.example.panpa.bonplan;
+package com.example.panpa.bonplan.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
+
+import com.example.panpa.bonplan.R;
 
 public class CalendarActivity extends AppCompatActivity {
     private String date;
