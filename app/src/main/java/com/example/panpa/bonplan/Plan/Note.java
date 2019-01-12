@@ -3,23 +3,37 @@ package com.example.panpa.bonplan.Plan;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 public class Note implements Parcelable {
     private String title;
-    private String date;
     private String place;
+    private String startTime;
+    private String endTime;
+    private String frequency;
+    private int recallTime;
     private String descrip;
 
-    public Note(String title,String date, String place, String descrip){
+    public Note(){
+
+    }
+    public Note(String title,String place, String startTime, String endTime, String frequency, int recallTime, String descrip){
         this.title=title;
-        this.date=date;
         this.place=place;
+        this.startTime=startTime;
+        this.endTime=endTime;
+        this.frequency=frequency;
+        this.recallTime=recallTime;
         this.descrip=descrip;
     }
 
     protected Note(Parcel in) {
         this.title=in.readString();
-        this.date=in.readString();
         this.place=in.readString();
+        this.startTime=in.readString();
+        this.endTime=in.readString();
+        this.frequency=in.readString();
+        this.recallTime=in.readInt();
         this.descrip=in.readString();
     }
 
@@ -29,14 +43,6 @@ public class Note implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getPlace() {
@@ -55,7 +61,37 @@ public class Note implements Parcelable {
         this.descrip = descrip;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
 
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequence) {
+        this.frequency = frequence;
+    }
+
+    public int getRecallTime() {
+        return recallTime;
+    }
+
+    public void setRecallTime(int recallTime) {
+        this.recallTime = recallTime;
+    }
 
 
 
@@ -79,9 +115,10 @@ public class Note implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.title);
-        dest.writeString(this.date);
         dest.writeString(this.place);
+        dest.writeString(this.startTime);
+        dest.writeString(this.endTime);
+        dest.writeString(this.frequency);
         dest.writeString(this.descrip);
-
     }
 }
