@@ -5,8 +5,5 @@
     tools:context=".Activities.NoteEditActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <item android:id="@+id/logoCalendar"
-        android:title="CalendarLogo"
-        android:icon="@mipmap/calendaricon"
-        app:showAsAction="ifRoom"/>
+
 </menu>
