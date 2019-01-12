@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -23,6 +24,16 @@ public class NoteEditActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);//设置toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 给左上角图标的左边加上一个返回的图标 。
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if(menuItem.getItemId()==R.id.logoCheck){
+                    Intent intent =new Intent(NoteEditActivity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -33,5 +44,11 @@ public class NoteEditActivity extends AppCompatActivity {
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        return true;
     }
 }

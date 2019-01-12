@@ -5,5 +5,8 @@
     tools:context=".Activities.NoteEditActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <item android:id="@+id/logoCheck"
+        android:title="Check"
+        android:icon="@mipmap/check"
+        app:showAsAction="ifRoom"/>
 </menu>
