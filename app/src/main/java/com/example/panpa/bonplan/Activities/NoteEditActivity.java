@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.panpa.bonplan.R;
 
@@ -34,6 +35,8 @@ public class NoteEditActivity extends AppCompatActivity {
                 return true;
             }
         });
+        TextView startText= findViewById(R.id.startButton);
+        startText.setHint("coucou");
     }
 
     @Override
