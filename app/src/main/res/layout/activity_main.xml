@@ -24,4 +24,9 @@
         app:rippleColor="@android:color/background_dark"
         app:srcCompat="@mipmap/add" />
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp" />
+
 </android.support.constraint.ConstraintLayout>

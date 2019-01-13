@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.panpa.bonplan.R;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,6 +38,12 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
         TextView startText= findViewById(R.id.startButton);
+        startText.setHint("coucou");
+        TextView endText= findViewById(R.id.endButton);
+        startText.setHint("coucou");
+        TextView freqText= findViewById(R.id.frequancyButton);
+        startText.setHint("coucou");
+        TextView recallText= findViewById(R.id.recallButton);
         startText.setHint("coucou");
     }
 
