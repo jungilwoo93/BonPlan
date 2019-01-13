@@ -8,5 +8,5 @@
     <item android:id="@+id/logoCheck"
         android:title="Check"
         android:icon="@mipmap/check"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

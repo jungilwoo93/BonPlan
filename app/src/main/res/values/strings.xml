@@ -3,10 +3,12 @@
     <string name="chooseDateText">Choose a date</string>
     <string name="chooseDateButton">Choose</string>
     <string name="title">Title</string>
-    <string name="lastname">lastname</string>
-    <string name="number">6123456789</string>
-    <string name="age">age</string>
-    <string name="female">female</string>
-    <string name="male">male</string>
+    <string name="place">Place</string>
+    <string name="dayEntier">Whole Day</string>
+    <string name="startTime">Start</string>
+    <string name="endTime">End</string>
+    <string name="frequancy">Frequancy</string>
+    <string name="recallTime">Recall</string>
+    <string name="description">Description</string>
     <string name="action_add">add</string>
 </resources>
