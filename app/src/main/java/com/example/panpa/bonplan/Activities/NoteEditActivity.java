@@ -1,6 +1,7 @@
 package com.example.panpa.bonplan.Activities;
 
 import android.content.Intent;
+import android.graphics.Camera;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,6 +35,9 @@ public class NoteEditActivity extends AppCompatActivity {
     public EditText placeText;
     public Switch wholeDay;
     public EditText descriptionText;
+    public Button imgButton;
+    public Button cameraButton;
+    public Button audioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +52,32 @@ public class NoteEditActivity extends AppCompatActivity {
         placeText = findViewById(R.id.place);
         wholeDay = findViewById(R.id.wholeDay);
         descriptionText= findViewById(R.id.description);
+        imgButton = findViewById(R.id.image);
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        cameraButton = findViewById(R.id.camera);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NoteEditActivity.this,CameraActivity.class);
+                startActivity(intent);
+            }
+        });
+        audioButton = findViewById(R.id.audio);
+        audioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         titleText.setText(note.getTitle());
         placeText.setText(note.getPlace());
         descriptionText.setText(note.getDescrip());
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {

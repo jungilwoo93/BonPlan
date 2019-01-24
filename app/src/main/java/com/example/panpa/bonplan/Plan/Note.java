@@ -1,9 +1,11 @@
 package com.example.panpa.bonplan.Plan;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Note implements Parcelable {
@@ -14,6 +16,8 @@ public class Note implements Parcelable {
     private String frequency;
     private String recallTime;
     private String descrip;
+    private ArrayList<Bitmap> images =new ArrayList<>();
+
 
     public Note(){
 

@@ -5,7 +5,4 @@
     <color name="colorFab">#B3AAA8</color>
     <color name="bg_white">#F8F5F4</color>
 
-    @color/text_topbar
-    @color/div_white
-
 </resources>
