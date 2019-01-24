@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Notes {
-    private List<Note> notes;
+    private ArrayList<Note> notes;
     public Notes(){
-
+        notes = new ArrayList<Note>();
     }
 
-    public List<Note> getNotes(){
-        if(notes == null){
+    public ArrayList<Note> getNotes(){
+        /*if(notes == null){
             notes = new ArrayList<Note>();
-        }
+        }*/
         return this.notes;
     }
 
     public void add(Note note){
-        getNotes().add(note);
+        this.notes.add(note);
+    }
+
+    public Note get(int pos){
+        return this.notes.get(pos);
     }
 
     public void update(Note from , Note to){

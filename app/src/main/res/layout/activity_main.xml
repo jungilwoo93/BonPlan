@@ -24,9 +24,16 @@
         app:rippleColor="@android:color/background_dark"
         app:srcCompat="@mipmap/add" />
 
-    <ListView
+        <ListView
+            android:id="@+id/listNote"
+            android:layout_marginTop="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="60dp">
+
+    </ScrollView>-->
 
 </android.support.constraint.ConstraintLayout>

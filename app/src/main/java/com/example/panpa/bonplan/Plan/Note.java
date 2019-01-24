@@ -3,6 +3,7 @@ package com.example.panpa.bonplan.Plan;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class Note implements Parcelable {
@@ -11,13 +12,13 @@ public class Note implements Parcelable {
     private String startTime;
     private String endTime;
     private String frequency;
-    private int recallTime;
+    private String recallTime;
     private String descrip;
 
     public Note(){
 
     }
-    public Note(String title,String place, String startTime, String endTime, String frequency, int recallTime, String descrip){
+    public Note(String title,String place, String startTime, String endTime, String frequency, String recallTime, String descrip){
         this.title=title;
         this.place=place;
         this.startTime=startTime;
@@ -33,7 +34,7 @@ public class Note implements Parcelable {
         this.startTime=in.readString();
         this.endTime=in.readString();
         this.frequency=in.readString();
-        this.recallTime=in.readInt();
+        this.recallTime=in.readString();
         this.descrip=in.readString();
     }
 
@@ -85,11 +86,11 @@ public class Note implements Parcelable {
         this.frequency = frequence;
     }
 
-    public int getRecallTime() {
+    public String getRecallTime() {
         return recallTime;
     }
 
-    public void setRecallTime(int recallTime) {
+    public void setRecallTime(String recallTime) {
         this.recallTime = recallTime;
     }
 
