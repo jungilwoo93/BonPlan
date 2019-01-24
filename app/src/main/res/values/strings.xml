@@ -4,7 +4,7 @@
     <string name="chooseDateButton">Choose</string>
     <string name="title">Title</string>
     <string name="place">Place</string>
-    <string name="dayEntier">Whole Day</string>
+    <string name="dayEntier">Whole Day / Note</string>
     <string name="startTime">Start</string>
     <string name="endTime">End</string>
     <string name="frequancy">Frequancy</string>
