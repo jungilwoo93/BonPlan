@@ -87,6 +87,8 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+
+
     private void bindViews() {
         sfv_preview = (SurfaceView) findViewById(R.id.sfv_preview);
         btn_take = (Button) findViewById(R.id.btn_take);

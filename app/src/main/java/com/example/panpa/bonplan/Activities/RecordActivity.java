@@ -37,7 +37,7 @@ public class RecordActivity extends AppCompatActivity {
     private MediaPlayer mAudioPlayer;
     private TextView text_timer;
     private int seconds;
-    private int MAXTIME = 10000;
+    private int MAXTIME = 50000;
     private String filePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +101,13 @@ public class RecordActivity extends AppCompatActivity {
             try {
                 progressBar.setMax(MAXTIME);
                 progressBar.setProgress(0);
-                createRecordFile();
+                if (ActivityCompat.checkSelfPermission(RecordActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(RecordActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                            10);
+                } else {
+                    createRecordFile();
+                }
                 showProgressforRecording();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -146,18 +152,21 @@ public class RecordActivity extends AppCompatActivity {
     private File createRecordFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String soundFileName = timeStamp + "_";
+        String soundFileName = "Record"+timeStamp;
         //File storageDir = getExternalFilesDir(Environment.DIRECTORY_MUSIC);
         File storageDir = new File(Environment.getExternalStorageDirectory(),"sounds");
         if(!storageDir.exists()){
             storageDir.mkdirs();
         }
-        //File sound = new File(storageDir,System.currentTimeMillis()+".amr");
-        File sound = File.createTempFile(
-                soundFileName,  /* prefix */
-                ".amr",         /* suffix */
-                storageDir      /* directory */
-        );
+        File sound = new File(storageDir,soundFileName+".amr");
+        if(!sound.exists()){
+            sound.createNewFile();
+        }
+        //File sound = File.createTempFile(
+        //        soundFileName,  /* prefix */
+         //       ".amr",         /* suffix */
+         //       storageDir      /* directory */
+        //);
         mr = new MediaRecorder();
         mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
         mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式

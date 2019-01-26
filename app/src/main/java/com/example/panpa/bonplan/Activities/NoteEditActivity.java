@@ -1,8 +1,15 @@
 package com.example.panpa.bonplan.Activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,15 +21,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.Plan.NoteAdapter;
 import com.example.panpa.bonplan.R;
-
-import org.w3c.dom.Text;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class NoteEditActivity extends AppCompatActivity {
     private NoteAdapter adapter = new NoteAdapter(this);
@@ -38,7 +41,9 @@ public class NoteEditActivity extends AppCompatActivity {
     public Button imgButton;
     public Button cameraButton;
     public Button audioButton;
-
+    private static final int REQUEST_CODE_PICK_IMAGE=3;
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 7;
+    private Uri uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +61,25 @@ public class NoteEditActivity extends AppCompatActivity {
         imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(NoteEditActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED)
+                {
+                    ActivityCompat.requestPermissions(NoteEditActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_CALL_PHONE2);
 
+                }else {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");//相片类型
+                    //setResult(REQUEST_CODE_PICK_IMAGE);
+                    startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+                }
+
+                /*Intent intent = new Intent(NoteEditActivity.this,GalleryActivity.class);
+                Note note = getEditNote();
+                intent.putExtra("note",note);
+                startActivity(intent);*/
             }
         });
         cameraButton = findViewById(R.id.camera);
@@ -203,4 +226,33 @@ public class NoteEditActivity extends AppCompatActivity {
         Log.d("NoteEditActivity","onClick : opening dialog.");
     }
 
+    public void onActivityResult(int req, int res, Intent data) {
+        switch (req) {
+            case REQUEST_CODE_PICK_IMAGE:
+                //if (res == RESULT_OK) {
+                try {
+                    Toast.makeText(this,"entrer",Toast.LENGTH_SHORT).show();
+                    uri = data.getData();
+                    //Bitmap bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                    Intent intent = new Intent(NoteEditActivity.this,GalleryActivity.class);
+                    intent.putExtra("note",getEditNote());
+                    intent.putExtra("uri",uri.toString());
+                    startActivity(intent);
+                    //imageView.setImageBitmap(bit);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("tag",e.getMessage());
+                    Toast.makeText(this,"程序崩溃",Toast.LENGTH_SHORT).show();
+                }
+                //}
+                //else{
+                //Log.i("liang", "失败");
+                //}
+
+                break;
+
+            default:
+                break;
+        }
+    }
 }
