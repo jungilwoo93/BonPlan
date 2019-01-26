@@ -41,6 +41,7 @@ public class NoteEditActivity extends AppCompatActivity {
     public Button imgButton;
     public Button cameraButton;
     public Button audioButton;
+    public Button paintButton;
     private static final int REQUEST_CODE_PICK_IMAGE=3;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 7;
     private Uri uri;
@@ -102,6 +103,13 @@ public class NoteEditActivity extends AppCompatActivity {
                 Note note = getEditNote();
                 intent.putExtra("note",note);
                 startActivity(intent);
+            }
+        });
+        paintButton=findViewById(R.id.paint);
+        paintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
             }
         });
         titleText.setText(note.getTitle());
