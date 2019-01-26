@@ -1,14 +1,11 @@
 package com.example.panpa.bonplan.Plan;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
 
-public class Note implements Parcelable {
+public class Note implements Serializable {
     private String title;
     private String place;
     private String startTime;
@@ -16,13 +13,10 @@ public class Note implements Parcelable {
     private String frequency;
     private String recallTime;
     private String descrip;
-    private ArrayList<Bitmap> images =new ArrayList<>();
+    private String pathImg;
+    //private ArrayList<Bitmap> images =new ArrayList<>();
 
-
-    public Note(){
-
-    }
-    public Note(String title,String place, String startTime, String endTime, String frequency, String recallTime, String descrip){
+    /*public Note(String title,String place, String startTime, String endTime, String frequency, String recallTime, String descrip){
         this.title=title;
         this.place=place;
         this.startTime=startTime;
@@ -30,6 +24,17 @@ public class Note implements Parcelable {
         this.frequency=frequency;
         this.recallTime=recallTime;
         this.descrip=descrip;
+    }*/
+
+    public Note(String title,String place, String startTime, String endTime, String frequency, String recallTime, String descrip,String pathImg){
+        this.title=title;
+        this.place=place;
+        this.startTime=startTime;
+        this.endTime=endTime;
+        this.frequency=frequency;
+        this.recallTime=recallTime;
+        this.descrip=descrip;
+        this.pathImg=pathImg;
     }
 
     protected Note(Parcel in) {
@@ -40,6 +45,7 @@ public class Note implements Parcelable {
         this.frequency=in.readString();
         this.recallTime=in.readString();
         this.descrip=in.readString();
+        this.pathImg=in.readString();
     }
 
     public String getTitle() {
@@ -98,9 +104,15 @@ public class Note implements Parcelable {
         this.recallTime = recallTime;
     }
 
+    public String getPathImg() {
+        return this.pathImg;
+    }
 
+    public void setPathImg(String pathImg) {
+        this.pathImg = pathImg;
+    }
 
-    public static final Creator<Note> CREATOR = new Creator<Note>() {
+    /*public static final Creator<Note> CREATOR = new Creator<Note>() {
         @Override
         public Note createFromParcel(Parcel in) {
             return new Note(in);
@@ -125,5 +137,6 @@ public class Note implements Parcelable {
         dest.writeString(this.endTime);
         dest.writeString(this.frequency);
         dest.writeString(this.descrip);
-    }
+        dest.writeString(this.pathImg);
+    }*/
 }

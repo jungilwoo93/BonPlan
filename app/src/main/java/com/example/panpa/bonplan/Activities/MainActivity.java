@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(MainActivity.this,NoteEditActivity.class);
-                intent.putExtra("note", new Note("","","","","","",""));
+                intent.putExtra("note", new Note("","","","","","","",""));
                 intent.putExtra("pos",-1);
                 startActivityForResult(intent,NOTE_CREATE);
                 //startActivity(intent);
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         if(requestCode==Code_Modifier){
             if(resultCode ==RESULT_OK){
-                Note ha = (Note) data.getSerializableExtra("note");//récuperer le contact
+                Note ha = (Note) data.getSerializableExtra("note");//.getParcelableExtra("note");//récuperer le contact
                 //Toast.makeText(this,ha.getNom(),Toast.LENGTH_SHORT).show();
                 int position = data.getIntExtra("pos",-1);
                 adapter.set(position, ha);//probleme, comment trouver la position
@@ -143,14 +143,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
         if(resultCode == 120){
-            Note ha = (Note) data.getSerializableExtra("note");
+            Note ha = (Note) data.getSerializableExtra("note");//.getParcelableExtra("note");
 //                Toast.makeText(this,ha.getNom(),Toast.LENGTH_SHORT).show();
             int sup =data.getIntExtra("sup",-1);
             adapter.remove(sup);
             adapter.notifyDataSetChanged();
         }
         if(resultCode == 101){
-            Note ha = (Note) data.getSerializableExtra("note");
+            Note ha = (Note) data.getSerializableExtra("note");//.getParcelableExtra("note");
 
             int position = data.getIntExtra("pos",-1);
             adapter.add(ha);

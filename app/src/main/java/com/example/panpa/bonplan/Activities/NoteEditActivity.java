@@ -43,8 +43,8 @@ public class NoteEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_edit);
-        Note note = (Note)getIntent().getParcelableExtra("note");
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbarEdit);
+        Note note = (Note)getIntent().getSerializableExtra("note")/*.getParcelableExtra("note")*/;
+        Toolbar toolbar = findViewById(R.id.toolbarEdit);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);//设置toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 给左上角图标的左边加上一个返回的图标。
@@ -64,14 +64,21 @@ public class NoteEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(NoteEditActivity.this,CameraActivity.class);
+                Note note = getEditNote();
+                intent.putExtra("note",note);
                 startActivity(intent);
+                //startActivityForResult(intent,PHOTO_CREATE);
+                //setResult(PHOTO_CREATE,intent);
             }
         });
         audioButton = findViewById(R.id.audio);
         audioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(NoteEditActivity.this,RecordActivity.class);
+                Note note = getEditNote();
+                intent.putExtra("note",note);
+                startActivity(intent);
             }
         });
         titleText.setText(note.getTitle());
@@ -83,8 +90,6 @@ public class NoteEditActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if(menuItem.getItemId()==R.id.logoCheck){
                     doValid();
-                    //intent.putExtra("title",title.getText());
-
                 }
                 return true;
             }
@@ -145,7 +150,7 @@ public class NoteEditActivity extends AppCompatActivity {
         return true;
     }
 
-    public void doValid(){
+    public Note getEditNote(){
         String title = this.titleText.getText().toString();
         String place = this.placeText.getText().toString();
         String startTime = this.startTextView.getText().toString();
@@ -153,20 +158,33 @@ public class NoteEditActivity extends AppCompatActivity {
         String frequency = this.freqTextView.getText().toString();
         String recallTime = this.recallTextView.getText().toString();
         String descrip = this.descriptionText.getText().toString();
+        String path = "";
+        return new Note(title,place,startTime,endTime,frequency,recallTime,descrip,path);
+    }
+
+    public void doValid(){
+        /*String title = this.titleText.getText().toString();
+        String place = this.placeText.getText().toString();
+        String startTime = this.startTextView.getText().toString();
+        String endTime = this.endTextView.getText().toString();
+        String frequency = this.freqTextView.getText().toString();
+        String recallTime = this.recallTextView.getText().toString();
+        String descrip = this.descriptionText.getText().toString();*/
         //switch (wholeDay.)
         //Intent intent =new Intent(NoteEditActivity.this,MainActivity.class);
         //Intent intent = getIntent();
+        Note note =getEditNote();
         Intent data = new Intent();
         int position = getIntent().getIntExtra("pos",-1);
         if(position!=-1){
-            Note note = new Note(title,place,startTime,endTime,frequency,recallTime,descrip);
+            //Note note = new Note(title,place,startTime,endTime,frequency,recallTime,descrip);
             data.putExtra("pos",position);
             data.putExtra("note",note);
             setResult(RESULT_OK,data);
             finish();;
         }
         else{
-            Note note = new Note(title,place,startTime,endTime,frequency,recallTime,descrip);
+            //Note note = new Note(title,place,startTime,endTime,frequency,recallTime,descrip);
             //data.putExtra("pos",position);
             data.putExtra("note",note);
             setResult(101,data);
