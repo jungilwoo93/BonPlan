@@ -109,7 +109,10 @@ public class NoteEditActivity extends AppCompatActivity {
         paintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                Intent intent =new Intent(NoteEditActivity.this, CanvasActivity.class);
+                Note note = getEditNote();
+                intent.putExtra("note",note);
+                startActivity(intent);
             }
         });
         titleText.setText(note.getTitle());

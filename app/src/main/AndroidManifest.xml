@@ -30,6 +30,7 @@
         <activity android:name=".Activities.PreviewActivity" />
         <activity android:name=".Activities.RecordActivity" />
         <activity android:name=".Activities.GalleryActivity" />
+        <activity android:name=".Activities.CanvasActivity" />
     </application>
 
 </manifest>
