@@ -6,6 +6,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -23,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +35,7 @@ import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.Plan.NoteAdapter;
 import com.example.panpa.bonplan.R;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -49,16 +54,20 @@ public class NoteEditActivity extends AppCompatActivity {
     public Button cameraButton;
     public Button audioButton;
     public Button paintButton;
+    public Button playButton;
     private static final int REQUEST_CODE_PICK_IMAGE=3;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 7;
     private Uri uri;
-    public FrameLayout layoutStart;
+    public LinearLayout layoutPlayAudio;
     public ImageView imageView;
+    private Note note;
+    private MediaPlayer mAudioPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_edit);
-        Note note = (Note)getIntent().getSerializableExtra("note")/*.getParcelableExtra("note")*/;
+        note = (Note)getIntent().getSerializableExtra("note")/*.getParcelableExtra("note")*/;
         Toolbar toolbar = findViewById(R.id.toolbarEdit);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);//设置toolbar
@@ -182,7 +191,7 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
 
-        layoutStart = findViewById(R.id.layoutStartTime);
+        //layoutPlayAudio = findViewById(R.id.layoutPlayAudio);
 
         wholeDay = findViewById(R.id.wholeDay);
         wholeDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
@@ -229,7 +238,39 @@ public class NoteEditActivity extends AppCompatActivity {
                 imageView.setVisibility(View.VISIBLE);
                 imageView.setImageURI(Uri.parse(note.getPathImg()));
             }
+            if(note.getPathAudio()!=""){
+                layoutPlayAudio =findViewById(R.id.layoutPlayAudio);
+                layoutPlayAudio.setVisibility(View.VISIBLE);
+                playButton=findViewById(R.id.playAudio);
+                playButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(NoteEditActivity.this,RecordActivity.class);
+                        intent.putExtra("note",note);
+                        startActivity(intent);
+                        //startPlay(note.getPathAudio());
+                    }
+                });
+                //imageView.setImageURI(Uri.parse(note.getPathImg()));
+            }
         }
+    }
+
+    private void startPlay(String filePath) {
+        mAudioPlayer = new MediaPlayer();
+        try {
+            mAudioPlayer.setDataSource(filePath);
+            mAudioPlayer.prepare();
+            mAudioPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*mAudioPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                startPlay(filePath);
+            }
+        });*/
     }
 
     @Override

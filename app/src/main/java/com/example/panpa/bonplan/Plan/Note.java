@@ -14,6 +14,7 @@ public class Note implements Serializable {
     private String recallTime;
     private String descrip;
     private String pathImg;
+    private String pathAudio="";
     //private ArrayList<Bitmap> images =new ArrayList<>();
 
     /*public Note(String title,String place, String startTime, String endTime, String frequency, String recallTime, String descrip){
@@ -110,6 +111,14 @@ public class Note implements Serializable {
 
     public void setPathImg(String pathImg) {
         this.pathImg = pathImg;
+    }
+
+    public String getPathAudio() {
+        return pathAudio;
+    }
+
+    public void setPathAudio(String pathAudio) {
+        this.pathAudio = pathAudio;
     }
 
     /*public static final Creator<Note> CREATOR = new Creator<Note>() {

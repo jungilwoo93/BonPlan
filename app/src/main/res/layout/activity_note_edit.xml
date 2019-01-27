@@ -367,22 +367,42 @@
         </LinearLayout>
 
         <LinearLayout
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/paint"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@mipmap/paint"
+            android:clickable="true" />
+        <TextView
+            android:id="@+id/text_paint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/paint"
+            android:textSize="12sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutPlayAudio"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="invisible">
             <Button
-                android:id="@+id/paint"
+                android:id="@+id/playAudio"
                 android:layout_width="45dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:background="@mipmap/paint"
+                android:background="@mipmap/play"
                 android:clickable="true" />
             <TextView
-                android:id="@+id/text_paint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/paint"
+                android:text="@string/play"
                 android:textSize="12sp" />
         </LinearLayout>
 

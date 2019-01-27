@@ -1,11 +1,15 @@
 package com.example.panpa.bonplan.Activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.R;
 
 import java.io.File;
@@ -32,6 +37,7 @@ public class RecordActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Button btn_play;
     private Button btn_cancel;
+    private Button btn_validate;
     private Timer mPlayingTimer;
     private Timer mRecordingtimer;
     private MediaPlayer mAudioPlayer;
@@ -39,11 +45,20 @@ public class RecordActivity extends AppCompatActivity {
     private int seconds;
     private int MAXTIME = 50000;
     private String filePath;
+    private Note note;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        note = (Note)getIntent().getSerializableExtra("note");
+        filePath = note.getPathAudio();
         btn_control = findViewById(R.id.btn_control);
+        if(filePath!=""){
+            btn_control.setVisibility(View.INVISIBLE);
+        }else{
+            btn_control.setVisibility(View.VISIBLE);
+        }
         progressBar = findViewById(R.id.progressBar);
         btn_play = findViewById(R.id.button_play);
         btn_cancel=findViewById(R.id.btn_cancel);
@@ -63,7 +78,7 @@ public class RecordActivity extends AppCompatActivity {
                     isRecord = true;
                 }else{
                     stopRecord();
-                    btn_control.setText("开始录制");
+                    btn_control.setText("重新录制");
                     isRecord = false;
                 }
             }
@@ -71,7 +86,9 @@ public class RecordActivity extends AppCompatActivity {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(RecordActivity.this, NoteEditActivity.class);
+                intent.putExtra("note",note);
+                startActivity(intent);
             }
         });
         btn_play.setOnClickListener(new View.OnClickListener(){
@@ -94,6 +111,17 @@ public class RecordActivity extends AppCompatActivity {
                 }
             }
         });
+        btn_validate=findViewById(R.id.btn_validate);
+        btn_validate.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RecordActivity.this,NoteEditActivity.class);
+                note.setPathAudio(filePath);
+                intent.putExtra("note",note);
+                startActivity(intent);
+            }
+        });
+
     }
     //开始录制
     private void startRecord(){
@@ -101,11 +129,21 @@ public class RecordActivity extends AppCompatActivity {
             try {
                 progressBar.setMax(MAXTIME);
                 progressBar.setProgress(0);
-                if (ActivityCompat.checkSelfPermission(RecordActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(RecordActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                            10);
-                } else {
+                if (ContextCompat.checkSelfPermission(RecordActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED
+                        &&ContextCompat.checkSelfPermission(RecordActivity.this,
+                        Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
+                        != PackageManager.PERMISSION_GRANTED)
+                {
+                    ActivityCompat.requestPermissions(RecordActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            112);
+                    ActivityCompat.requestPermissions(RecordActivity.this,
+                            new String[]{Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS},
+                            113);
+
+                }else {
                     createRecordFile();
                 }
                 showProgressforRecording();
@@ -149,7 +187,7 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
-    private File createRecordFile() throws IOException {
+    private void createRecordFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String soundFileName = "Record"+timeStamp;
@@ -182,7 +220,7 @@ public class RecordActivity extends AppCompatActivity {
         this.filePath = sound.getAbsolutePath();
         Toast.makeText(RecordActivity.this,sound.getAbsolutePath(),Toast.LENGTH_SHORT).show();
         // Save a file: path for use with ACTION_VIEW intents
-        return sound;
+        //return sound;
     }
 
     private void showProgressforRecording() {
@@ -212,7 +250,7 @@ public class RecordActivity extends AppCompatActivity {
     private void startPlay() {
         mAudioPlayer = new MediaPlayer();
         try {
-            mAudioPlayer.setDataSource(filePath);
+            mAudioPlayer.setDataSource(this, Uri.parse(filePath));
             mAudioPlayer.prepare();
             updatingPlyingProgressBar();
             mAudioPlayer.start();

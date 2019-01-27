@@ -10,10 +10,9 @@
         android:id="@+id/btn_control"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="177dp"
+        android:layout_alignStart="@+id/progressBar"
+        android:layout_marginTop="175dp"
         android:text="开始录音"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="168dp" />
@@ -21,11 +20,11 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="331dp"
+        android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="77dp"
         tools:layout_editor_absoluteX="91dp"
         tools:layout_editor_absoluteY="70dp" />
@@ -34,8 +33,9 @@
         android:id="@+id/button_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/btn_control"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="99dp"
         android:text="Play" />
 
     <Button
@@ -44,12 +44,21 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/progressBar"
         android:layout_alignTop="@+id/btn_control"
-        android:text="Cancel" />
+        android:text="@string/cancel" />
 
     <TextView
         android:id="@+id/text_timer"
-        android:layout_width="330dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/progressBar"
         android:layout_below="@+id/progressBar" />
+
+    <Button
+        android:id="@+id/btn_validate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_control"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="100dp"
+        android:text="@string/validate" />
 </RelativeLayout>

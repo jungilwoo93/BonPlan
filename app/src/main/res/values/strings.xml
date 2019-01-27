@@ -19,6 +19,8 @@
     <string name="paint">Paint</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="play">Play</string>
+    <string name="validate">Validate</string>
     <!--<string-array name="months">
         <item>Janvier</item>
         <item>Février</item>
