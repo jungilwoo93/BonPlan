@@ -5,8 +5,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,19 +70,18 @@ public class CameraActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             int hasCameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
-            int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            //int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             List<String> permissions = new ArrayList<String>();
 
             if (hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.CAMERA);
                 //user granted your permission
             }
-            if(hasWritePermission!= PackageManager.PERMISSION_GRANTED){
+            /*if(hasWritePermission!= PackageManager.PERMISSION_GRANTED){
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
+            }*/
             if (!permissions.isEmpty()) {
                 requestPermissions(permissions.toArray(new String[permissions.size()]), 111);
-                requestPermissions(permissions.toArray(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}), 112);
                 //user denied your permission
             }
         }
@@ -138,15 +140,32 @@ public class CameraActivity extends AppCompatActivity {
         try {
             /*String pathStockage = Environment.getExternalStorageDirectory().toString();
             File fileTempo = File.createTempFile("img","");*/
+            if (ContextCompat.checkSelfPermission(CameraActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED
+                    &&ContextCompat.checkSelfPermission(CameraActivity.this,
+                    Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
+                    != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(CameraActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        112);
+                ActivityCompat.requestPermissions(CameraActivity.this,
+                        new String[]{Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS},
+                        113);
 
-            File file =createImageFile(bytes);
+            }else{
+                File file =createImageFile(bytes);
+                return file.getAbsolutePath();
+            }
+
             /*File file = new File("image.png");
             file.createNewFile();
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bytes);
             fos.flush();
             fos.close();*/
-            return file.getAbsolutePath();
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,16 +176,34 @@ public class CameraActivity extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
+        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(Environment.getExternalStorageDirectory().getAbsolutePath());
+        String filePath =Environment.getExternalStorageDirectory()
+                .getAbsolutePath()
+                + "/"
+                + imageFileName
+                + ".png";
+        /*File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".png",         /* suffix */
-                storageDir      /* directory */
-        );
+               // ".png",         /* suffix */
+               // storageDir      /* directory */
+       // );
+        File image = new File(filePath);
+        if (!image.exists()) {// 如果文件不存在，就创建文件
+            try {
+                image.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         FileOutputStream fos = new FileOutputStream(image);
         fos.write(bytes);
         fos.flush();
         fos.close();
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri contentUri = Uri.fromFile(image);
+        mediaScanIntent.setData(contentUri);
+        sendBroadcast(mediaScanIntent);
         // Save a file: path for use with ACTION_VIEW intents
         return image;
     }
