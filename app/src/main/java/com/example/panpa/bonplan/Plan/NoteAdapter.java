@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,23 +60,27 @@ public class NoteAdapter extends BaseAdapter {
         viewHolder.title = convertView.findViewById(R.id.titleInList);
         viewHolder.title.setText(note.getTitle());
         viewHolder.switchValid = convertView.findViewById(R.id.valideNote);
-        viewHolder.switchValid.setOnClickListener(new View.OnClickListener(){
+        viewHolder.switchValid.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
-            public void onClick(View view) {
-
-                //Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()) Toast.makeText(context,compoundButton.getText().toString(),Toast.LENGTH_SHORT).show();
             }
+
+            //Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
+
         });
         viewHolder.switchPost = convertView.findViewById(R.id.postponeNote);
-        viewHolder.switchPost.setOnClickListener(new View.OnClickListener(){
+        viewHolder.switchPost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
-            public void onClick(View view) {
-
-                //Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()) Toast.makeText(context,compoundButton.getText().toString(),Toast.LENGTH_SHORT).show();
             }
         });
         return convertView;
     }
+
+
+
 
     public boolean add(Note object) {
         return listNote.add(object);
@@ -175,8 +181,8 @@ public class NoteAdapter extends BaseAdapter {
     public class ViewHolder{
         public TextView startTime;
         public TextView title;
-        public Switch switchValid;
-        public Switch switchPost;
+        public CheckBox switchValid;
+        public CheckBox switchPost;
     }
 }
 

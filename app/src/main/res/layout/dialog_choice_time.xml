@@ -58,13 +58,13 @@
             android:id="@+id/validateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ok" />
+            android:text="@string/ok" />
 
         <Button
             android:id="@+id/cancelTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
     </LinearLayout>
 
 </LinearLayout>

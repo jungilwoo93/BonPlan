@@ -10,7 +10,15 @@
     <string name="frequancy">Frequancy</string>
     <string name="recallTime">Recall</string>
     <string name="description">Description</string>
-    <string name="action_add">add</string>
+    <string name="action_add">Add</string>
+    <string name="frequancyHint">Never</string>
+    <string name="recallHint">10 mins before</string>
+    <string name="camera">Camera</string>
+    <string name="image">Image</string>
+    <string name="audio">Audio</string>
+    <string name="paint">Paint</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
     <!--<string-array name="months">
         <item>Janvier</item>
         <item>Février</item>

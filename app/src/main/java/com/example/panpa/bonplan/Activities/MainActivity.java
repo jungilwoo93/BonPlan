@@ -95,7 +95,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(MainActivity.this,NoteEditActivity.class);
-                intent.putExtra("note", new Note("","","","","","","",""));
+                Calendar cal = Calendar.getInstance();
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                int month =cal.get(Calendar.MONTH);
+                int hour = cal.get(Calendar.HOUR);
+                int minu = cal.get(Calendar.MINUTE);
+                if(minu<30&&minu>=0){
+                    minu=30;
+                }else{
+                    hour+=1;
+                    minu=00;
+                }
+                String startTime=day + "/" + month + " " + hour + ":" + minu;
+                String endTime = day + "/" + month + " " + (hour+1) + ":" + minu;
+                intent.putExtra("note", new Note("","",startTime,endTime,"Never","10 mins before","",""));
                 intent.putExtra("pos",-1);
                 startActivityForResult(intent,NOTE_CREATE);
                 //startActivity(intent);

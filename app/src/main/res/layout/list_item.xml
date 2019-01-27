@@ -49,14 +49,14 @@
             android:layout_weight="1"
             android:text="TextView" />
 
-        <Switch
+        <CheckBox
             android:id="@+id/valideNote"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
             android:layout_weight="2" />
 
 
-        <Switch
+        <CheckBox
             android:id="@+id/postponeNote"
             android:layout_width="45dp"
             android:layout_height="wrap_content"

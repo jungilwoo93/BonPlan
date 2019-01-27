@@ -127,7 +127,7 @@ public class NoteEditActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Calendar cal = Calendar.getInstance();
+        /*Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month =cal.get(Calendar.MONTH);
         int hour = cal.get(Calendar.HOUR);
@@ -137,9 +137,9 @@ public class NoteEditActivity extends AppCompatActivity {
         }else{
             hour+=1;
             minu=00;
-        }
+        }*/
         startTextView= findViewById(R.id.startTextView);
-        startTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
+        //startTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
         startTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,7 +149,7 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
         endTextView= findViewById(R.id.endButton);
-        endTextView.setHint(day + "/" + month + " " + hour+1 + ":" + minu);
+        //endTextView.setHint(day + "/" + month + " " + hour+1 + ":" + minu);
         endTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,8 +182,8 @@ public class NoteEditActivity extends AppCompatActivity {
             descriptionText.setText(note.getDescrip());
             startTextView.setHint(note.getStartTime());
             endTextView.setHint(note.getStartTime());
-            freqTextView.setHint(note.getStartTime());
-            recallTextView.setHint(note.getStartTime());
+            freqTextView.setHint(note.getFrequency());
+            recallTextView.setHint(note.getRecallTime());
         }
     }
 
