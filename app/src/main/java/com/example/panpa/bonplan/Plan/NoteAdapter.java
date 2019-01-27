@@ -1,6 +1,8 @@
 package com.example.panpa.bonplan.Plan;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.panpa.bonplan.Activities.MainActivity;
+import com.example.panpa.bonplan.Activities.NoteEditActivity;
 import com.example.panpa.bonplan.R;
 
 import java.util.ArrayList;
@@ -45,7 +48,7 @@ public class NoteAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position,View convertView, ViewGroup parent) {
         //Note note = getItem(position);
         //MainActivity.ViewHolder mainViewHolder = null;
         if(convertView== null){
@@ -53,26 +56,26 @@ public class NoteAdapter extends BaseAdapter {
             convertView=inflater.inflate(R.layout.list_item,null);
         }
         Note note = get(position);
-        NoteAdapter.ViewHolder viewHolder = new NoteAdapter.ViewHolder();
+        final NoteAdapter.ViewHolder viewHolder = new NoteAdapter.ViewHolder();
         viewHolder.startTime = convertView.findViewById(R.id.startTimeInList);
         viewHolder.startTime.setText(note.getStartTime());
-        Toast.makeText(context,note.getStartTime(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context,note.getStartTime(), Toast.LENGTH_SHORT).show();
         viewHolder.title = convertView.findViewById(R.id.titleInList);
         viewHolder.title.setText(note.getTitle());
         viewHolder.switchValid = convertView.findViewById(R.id.valideNote);
         viewHolder.switchValid.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton.isChecked()) Toast.makeText(context,compoundButton.getText().toString(),Toast.LENGTH_SHORT).show();
+                viewHolder.title.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //trait sur title
+                viewHolder.startTime.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
+                if(compoundButton.isChecked()) Toast.makeText(context,"Check".toString(),Toast.LENGTH_LONG).show();
             }
-
-            //Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
-
         });
         viewHolder.switchPost = convertView.findViewById(R.id.postponeNote);
         viewHolder.switchPost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //Intent intent = new Intent();
                 if(compoundButton.isChecked()) Toast.makeText(context,compoundButton.getText().toString(),Toast.LENGTH_SHORT).show();
             }
         });

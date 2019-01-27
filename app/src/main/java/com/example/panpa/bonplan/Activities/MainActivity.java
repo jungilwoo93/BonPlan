@@ -29,7 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class MainActivity extends AppCompatActivity /*implements AdapterView.OnItemClickListener*/{
     public NoteAdapter adapter= new NoteAdapter(this);
     public static final int NOTE_CREATE = 101;
     public static final int NOTE_UPDATE = 120;
@@ -59,6 +59,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // 子项布局id
         // 数据
         listNote.setAdapter(adapter);//设置适配器
+        listNote.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Note yo = (Note) adapter.get(position);
+                Intent monIntent = new Intent(MainActivity.this,NoteEditActivity.class);//dans ce classe pour démarrer le class ContactActivity
+                monIntent.putExtra("note",yo);
+                monIntent.putExtra("pos",position);
+                monIntent.putExtra("sup",position);
+                Toast.makeText(MainActivity.this,"Check".toString(),Toast.LENGTH_LONG).show();
+                //il faut ajouter implement seridizable dans le class Contact,sinon,c'est rouge,on peux pas
+                //utiliser Contact yo
+                //transferer en binaire
+                startActivityForResult(monIntent, Code_Modifier);
+            }
+        });
         /*listNote.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -97,8 +112,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Intent intent =new Intent(MainActivity.this,NoteEditActivity.class);
                 Calendar cal = Calendar.getInstance();
                 int day = cal.get(Calendar.DAY_OF_MONTH);
-                int month =cal.get(Calendar.MONTH);
-                int hour = cal.get(Calendar.HOUR);
+                int month =cal.get(Calendar.MONTH)+1;
+                int hour = cal.get(Calendar.HOUR_OF_DAY);
                 int minu = cal.get(Calendar.MINUTE);
                 if(minu<30&&minu>=0){
                     minu=30;
@@ -108,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 String startTime=day + "/" + month + " " + hour + ":" + minu;
                 String endTime = day + "/" + month + " " + (hour+1) + ":" + minu;
+                //Toast.makeText(this,month,Toast.LENGTH_SHORT).show();
                 intent.putExtra("note", new Note("","",startTime,endTime,"Never","10 mins before","",""));
                 intent.putExtra("pos",-1);
                 startActivityForResult(intent,NOTE_CREATE);
@@ -130,18 +146,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
     }
 
-    @Override
+    /*@Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Note yo = (Note) adapter.get(position);
         Intent monIntent = new Intent(this,NoteEditActivity.class);//dans ce classe pour démarrer le class ContactActivity
         monIntent.putExtra("note",yo);
         monIntent.putExtra("pos",position);
         monIntent.putExtra("sup",position);
+        Toast.makeText(this,"Check".toString(),Toast.LENGTH_LONG).show();
         //il faut ajouter implement seridizable dans le class Contact,sinon,c'est rouge,on peux pas
         //utiliser Contact yo
         //transferer en binaire
         startActivityForResult(monIntent, Code_Modifier);
-    }
+    }*/
 
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         if(requestCode==Code_Modifier){
