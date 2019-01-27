@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -22,14 +21,9 @@ public class DialogFreq extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.dialog_choice_freq,container,false);
-        //freq=v.findViewById(R.id.freqSpinner);
-        actionOK= v.findViewById(R.id.validateTime);
-        actionCancel= v.findViewById(R.id.cancelTime);
-        /*ArrayList<String> listFreq = addChoiceOnSpinner();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, listFreq);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        freq.setAdapter(adapter);*/
-
+        freq=v.findViewById(R.id.freq);
+        actionOK= v.findViewById(R.id.validateFreq);
+        actionCancel= v.findViewById(R.id.cancelFreq);
         actionCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,16 +33,12 @@ public class DialogFreq extends DialogFragment {
         actionOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String input = "Bello";
-                ((NoteEditActivity)getActivity()).startTextView.setHint(input);
+                String input = freq.getSelectedItem().toString();
+                ((NoteEditActivity)getActivity()).freqTextView.setHint(input);
                 getDialog().dismiss();
             }
         });
         return v;
     }
 
-    /*public ArrayList<String> addChoiceOnSpinner(){
-        ArrayList<String> list = new ArrayList<String>();
-        return list;
-    }*/
 }

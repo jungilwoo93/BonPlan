@@ -74,5 +74,13 @@
         <item>Every Year</item>
         <item>Costom Frequency</item>
     </string-array>
+    <string-array name="recall">
+        <item>10mins before</item>
+        <item>15mins before</item>
+        <item>30mins before</item>
+        <item>1 hour before</item>
+        <item>1 day before</item>
+        <item>1 week before</item>
+    </string-array>
 
 </resources>

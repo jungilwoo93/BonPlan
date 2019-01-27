@@ -29,14 +29,13 @@ public class CanvasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_canvas);
         Toolbar toolbar = findViewById(R.id.toolbarEdit);
         toolbar.setTitle("");
-        setSupportActionBar(toolbar);//设置toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 给左上角图标的左边加上一个返回的图标。
-        view=findViewById(R.id.canvas);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        view=findViewById(R.id.canvas);//récupérer la canvas pour designer
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if(menuItem.getItemId()==R.id.logoCheck){
-                    //doValid();
                     if (ContextCompat.checkSelfPermission(CanvasActivity.this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             != PackageManager.PERMISSION_GRANTED
@@ -60,7 +59,6 @@ public class CanvasActivity extends AppCompatActivity {
                         Intent intent = new Intent(CanvasActivity.this,NoteEditActivity.class);
                         Note note = (Note)getIntent().getSerializableExtra("note");
                         note.setPathImg(image.getAbsolutePath());
-                        Toast.makeText(CanvasActivity.this,image.getAbsolutePath(),Toast.LENGTH_SHORT).show();
                         intent.putExtra("note",note);
                         startActivity(intent);
                     }

@@ -6,16 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import com.example.panpa.bonplan.R;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class DialogTime extends DialogFragment {
 
@@ -36,44 +32,44 @@ public class DialogTime extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.dialog_choice_time,container,false);
-        years= v.findViewById(R.id.years);
-        months= v.findViewById(R.id.months);
-        days= v.findViewById(R.id.days);
-        hours= v.findViewById(R.id.hours);
-        minutes= v.findViewById(R.id.minutes);
-        actionOK= v.findViewById(R.id.validateTime);
-        actionCancel= v.findViewById(R.id.cancelTime);
         Calendar cal=Calendar.getInstance();
-        //String monthname=(String)android.text.format.DateFormat.format("MMMM", new Date());
-        //years.setSelection(((ArrayAdapter)years.getAdapter()).getPosition("February"));
+        //Spinner pour les années
+        years= v.findViewById(R.id.years);
         years.setSelection(((ArrayAdapter)years.getAdapter()).getPosition(Calendar.YEAR));
+        //Spinner pour les mois
+        months= v.findViewById(R.id.months);
         months.setSelection(cal.get(Calendar.MONTH)+1);
+        //Spinner pour les jours
+        days= v.findViewById(R.id.days);
         ArrayList<String> listDay = addDayOnSpinner();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, listDay);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         days.setAdapter(adapter);
         days.setSelection(cal.get(Calendar.DAY_OF_MONTH)-1);
+        //Spinner pour les heures
+        hours= v.findViewById(R.id.hours);
         ArrayList<String> listHour = addDayOnSpinner();
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, listHour);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        hours.setAdapter(adapter);
+        hours.setAdapter(adapter2);
         hours.setSelection(cal.get(Calendar.HOUR_OF_DAY));
+        //Spinner pour les minutes
+        minutes= v.findViewById(R.id.minutes);
         ArrayList<String> listMinute = addMinuteOnSpinner();
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, listMinute);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         minutes.setAdapter(adapter3);
         minutes.setSelection(0);
-        //minutes.setSelection(cal.get(Calendar.MINUTE)%5+cal.get(Calendar.MINUTE));
-        /*ArrayList<String> listYears = addYearOnSpinner();
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, listYears);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        years.setAdapter(adapter);*/
+        //Button Cancel
+        actionCancel= v.findViewById(R.id.cancelTime);
         actionCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getDialog().dismiss();
             }
         });
+        //Boutton OK
+        actionOK= v.findViewById(R.id.validateTime);
         actionOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,17 +85,13 @@ public class DialogTime extends DialogFragment {
                     }else{
                         ((NoteEditActivity)getActivity()).endTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
                     }
-
                 }else{
                     if (type == 0) {
                         ((NoteEditActivity)getActivity()).startTextView.setHint(day + "/" + month + "/" + year + " " + hour + ":" + minu);
                     }else{
                         ((NoteEditActivity)getActivity()).endTextView.setHint(day + "/" + month + "/" + year + " " + hour + ":" + minu);
                     }
-
                 }
-                //String input = "Bello";
-                //((NoteEditActivity)getActivity()).startTextView.setHint(input);
                 getDialog().dismiss();
             }
         });
@@ -136,7 +128,6 @@ public class DialogTime extends DialogFragment {
         for(int i = 0;i<59;i=i+5){
             list.add(Integer.toString(i));
         }
-        //System.out.println(list.toString());
         return list;
     }
 
