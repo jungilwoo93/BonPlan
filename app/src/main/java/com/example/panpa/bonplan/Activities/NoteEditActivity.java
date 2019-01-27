@@ -3,20 +3,13 @@ package com.example.panpa.bonplan.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Camera;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,24 +17,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.panpa.bonplan.Plan.Note;
-import com.example.panpa.bonplan.Plan.NoteAdapter;
 import com.example.panpa.bonplan.R;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-
 public class NoteEditActivity extends AppCompatActivity {
-    private NoteAdapter adapter = new NoteAdapter(this);
-    private static final String TAG = "NoteEditActivity";
+    private static final int NOTE_CREATE = 101;
     public TextView startTextView;
     public TextView endTextView;
     public TextView freqTextView;
@@ -70,8 +53,8 @@ public class NoteEditActivity extends AppCompatActivity {
         note = (Note)getIntent().getSerializableExtra("note")/*.getParcelableExtra("note")*/;
         Toolbar toolbar = findViewById(R.id.toolbarEdit);
         toolbar.setTitle("");
-        setSupportActionBar(toolbar);//设置toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 给左上角图标的左边加上一个返回的图标。
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -89,25 +72,6 @@ public class NoteEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openGallery();
-                /*if (ContextCompat.checkSelfPermission(NoteEditActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED)
-                {
-                    ActivityCompat.requestPermissions(NoteEditActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_CALL_PHONE2);
-
-                }else {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");//相片类型
-                    //setResult(REQUEST_CODE_PICK_IMAGE);
-                    startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
-                }*/
-
-                /*Intent intent = new Intent(NoteEditActivity.this,GalleryActivity.class);
-                Note note = getEditNote();
-                intent.putExtra("note",note);
-                startActivity(intent);*/
             }
         });
         cameraButton = findViewById(R.id.camera);
@@ -118,8 +82,6 @@ public class NoteEditActivity extends AppCompatActivity {
                 Note note = getEditNote();
                 intent.putExtra("note",note);
                 startActivity(intent);
-                //startActivityForResult(intent,PHOTO_CREATE);
-                //setResult(PHOTO_CREATE,intent);
             }
         });
         audioButton = findViewById(R.id.audio);
@@ -142,19 +104,7 @@ public class NoteEditActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        /*Calendar cal = Calendar.getInstance();
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int month =cal.get(Calendar.MONTH);
-        int hour = cal.get(Calendar.HOUR);
-        int minu = cal.get(Calendar.MINUTE);
-        if(minu<30&&minu>=0){
-            minu=30;
-        }else{
-            hour+=1;
-            minu=00;
-        }*/
         startTextView= findViewById(R.id.startTextView);
-        //startTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
         startTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,7 +114,6 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
         endTextView= findViewById(R.id.endButton);
-        //endTextView.setHint(day + "/" + month + " " + hour+1 + ":" + minu);
         endTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,31 +139,16 @@ public class NoteEditActivity extends AppCompatActivity {
                 dialog.show(getFragmentManager(),"DialogRecall");
             }
         });
-
-        //layoutPlayAudio = findViewById(R.id.layoutPlayAudio);
-
         wholeDay = findViewById(R.id.wholeDay);
         wholeDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(compoundButton.isChecked()){
-                    Toast.makeText(NoteEditActivity.this,"Check".toString(),Toast.LENGTH_SHORT).show();
-                    /*startTextView.setEnabled(false);
-                    endTextView.setEnabled(false);
-                    freqTextView.setEnabled(false);
-                    recallTextView.setEnabled(false);*/
-                    //layoutStart.setVisibility(View.INVISIBLE);
-                    //startTextView.setVisibility(View.INVISIBLE);
                     startTextView.setVisibility(View.GONE);
                     endTextView.setVisibility(View.INVISIBLE);
                     freqTextView.setVisibility(View.INVISIBLE);
                     recallTextView.setVisibility(View.INVISIBLE);
                 }else{
-                    Toast.makeText(NoteEditActivity.this,"Uncheck".toString(),Toast.LENGTH_SHORT).show();
-                    /*startTextView.setEnabled(true);
-                    endTextView.setEnabled(true);
-                    freqTextView.setEnabled(true);
-                    recallTextView.setEnabled(true);*/
                     startTextView.setVisibility(View.VISIBLE);
                     endTextView.setVisibility(View.VISIBLE);
                     freqTextView.setVisibility(View.VISIBLE);
@@ -248,29 +182,10 @@ public class NoteEditActivity extends AppCompatActivity {
                         Intent intent = new Intent(NoteEditActivity.this,RecordActivity.class);
                         intent.putExtra("note",note);
                         startActivity(intent);
-                        //startPlay(note.getPathAudio());
                     }
                 });
-                //imageView.setImageURI(Uri.parse(note.getPathImg()));
             }
         }
-    }
-
-    private void startPlay(String filePath) {
-        mAudioPlayer = new MediaPlayer();
-        try {
-            mAudioPlayer.setDataSource(filePath);
-            mAudioPlayer.prepare();
-            mAudioPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        /*mAudioPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                startPlay(filePath);
-            }
-        });*/
     }
 
     @Override
@@ -297,44 +212,25 @@ public class NoteEditActivity extends AppCompatActivity {
         String frequency = this.freqTextView.getHint().toString();
         String recallTime = this.recallTextView.getHint().toString();
         String descrip = this.descriptionText.getText().toString();
-        String path = "";
+        String path = note.getPathImg();
         return new Note(title,place,startTime,endTime,frequency,recallTime,descrip,path);
     }
 
     public void doValid(){
-        /*String title = this.titleText.getText().toString();
-        String place = this.placeText.getText().toString();
-        String startTime = this.startTextView.getText().toString();
-        String endTime = this.endTextView.getText().toString();
-        String frequency = this.freqTextView.getText().toString();
-        String recallTime = this.recallTextView.getText().toString();
-        String descrip = this.descriptionText.getText().toString();*/
-        //switch (wholeDay.)
-        //Intent intent =new Intent(NoteEditActivity.this,MainActivity.class);
-        //Intent intent = getIntent();
         Note note =getEditNote();
         Intent data = new Intent();
         int position = getIntent().getIntExtra("pos",-1);
         if(position!=-1){
-            //Note note = new Note(title,place,startTime,endTime,frequency,recallTime,descrip);
             data.putExtra("pos",position);
             data.putExtra("note",note);
             setResult(RESULT_OK,data);
             finish();;
         }
         else{
-            //Note note = new Note(title,place,startTime,endTime,frequency,recallTime,descrip);
-            //data.putExtra("pos",position);
             data.putExtra("note",note);
-            setResult(101,data);
+            setResult(NOTE_CREATE,data);
             finish();
         }
-        //Note note = new Note(title,place, startTime, endTime,frequency, recallTime, descrip);
-        //intent.putExtra("note", note);
-        //setResult(RESULT_OK, intent);
-        //finish();
-        //startActivity(intent);
-        //startActivityForResult(intent,RESULT_OK);
     }
 
     public void changeImage(View v){
@@ -342,6 +238,7 @@ public class NoteEditActivity extends AppCompatActivity {
     }
 
     public void openGallery(){
+        //ouvrir le gallerie et choisir une image et l'envoyer
         if (ContextCompat.checkSelfPermission(NoteEditActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED)
@@ -352,8 +249,7 @@ public class NoteEditActivity extends AppCompatActivity {
 
         }else {
             Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");//相片类型
-            //setResult(REQUEST_CODE_PICK_IMAGE);
+            intent.setType("image/*");
             startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
         }
     }
@@ -361,28 +257,18 @@ public class NoteEditActivity extends AppCompatActivity {
     public void onActivityResult(int req, int res, Intent data) {
         switch (req) {
             case REQUEST_CODE_PICK_IMAGE:
-                //if (res == RESULT_OK) {
+                //req quand on choisit une photo dans le gallerie
                 try {
-                    Toast.makeText(this,"entrer",Toast.LENGTH_SHORT).show();
                     uri = data.getData();
-                    //Bitmap bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                    //dernière activity retourne cet uri
                     Intent intent = new Intent(NoteEditActivity.this,GalleryActivity.class);
                     intent.putExtra("note",getEditNote());
                     intent.putExtra("uri",uri.toString());
                     startActivity(intent);
-                    //imageView.setImageBitmap(bit);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.d("tag",e.getMessage());
-                    Toast.makeText(this,"程序崩溃",Toast.LENGTH_SHORT).show();
                 }
-                //}
-                //else{
-                //Log.i("liang", "失败");
-                //}
-
                 break;
-
             default:
                 break;
         }

@@ -43,24 +43,6 @@ public class GalleryActivity extends AppCompatActivity {
 
     }
 
-    public void onActivityResult(int req, int res, Intent data) {
-        switch (req) {
-            //req quand on choisit une photo dans le gallerie
-            case REQUEST_CODE_PICK_IMAGE:
-                try {
-                    //dernière activity retourne cet uri
-                    uri = data.getData();
-                    Bitmap bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                    imageView.setImageBitmap(bit);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     public void validate(){
         Intent intent = new Intent(GalleryActivity.this,NoteEditActivity.class);
         Note note = (Note)getIntent().getSerializableExtra("note");
