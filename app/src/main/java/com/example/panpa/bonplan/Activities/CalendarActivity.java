@@ -24,7 +24,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbarCalendar);
+        Toolbar toolbar = findViewById(R.id.toolbarCalendar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);//设置toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 给左上角图标的左边加上一个返回的图标 。
@@ -36,10 +36,10 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 Calendar cal=Calendar.getInstance();
-                Date d = new Date(year,month,dayOfMonth);
-                SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
-                String month_name = month_date.format(d);
-                date = dayOfMonth + " " + month_name + " " + year;
+                //Date d = new Date(year,month,dayOfMonth);
+                //SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
+                //String month_name = month_date.format(d);
+                date = dayOfMonth + " " + (month+1) + " " + year;
                 dateChoosed.setText(date);
                 calendarText.setText("You choose : ");
             }
