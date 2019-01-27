@@ -1,37 +1,24 @@
 package com.example.panpa.bonplan.Activities;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.Plan.NoteAdapter;
-import com.example.panpa.bonplan.Plan.Notes;
 import com.example.panpa.bonplan.R;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity{
     private NoteAdapter adapter;
@@ -133,7 +120,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public Date splitStringToDate(String date){
-        String[] separated = date.split(" ");
+        String[] separated = date.split("/");
         String day = separated[0];
         String month = separated[1];
         String year = separated[2];
@@ -154,14 +141,14 @@ public class MainActivity extends AppCompatActivity{
 
             }
         }
-        if(resultCode == 120){
+        if(resultCode == NOTE_UPDATE){
             // supprimer la note sur listView
             Note note = (Note) data.getSerializableExtra("note");
             int sup =data.getIntExtra("sup",-1);
             adapter.remove(sup);
             adapter.notifyDataSetChanged();
         }
-        if(resultCode == 101){
+        if(resultCode == NOTE_CREATE){
             //ajouter la note sur listView
             Note note = (Note) data.getSerializableExtra("note");
             int position = data.getIntExtra("pos",-1);
