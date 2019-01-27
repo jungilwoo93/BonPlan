@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ public class NoteEditActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 7;
     private Uri uri;
     public FrameLayout layoutStart;
+    public ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,13 +74,13 @@ public class NoteEditActivity extends AppCompatActivity {
         });
         titleText = findViewById(R.id.title);
         placeText = findViewById(R.id.place);
-
         descriptionText= findViewById(R.id.description);
         imgButton = findViewById(R.id.image);
         imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(NoteEditActivity.this,
+                openGallery();
+                /*if (ContextCompat.checkSelfPermission(NoteEditActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED)
                 {
@@ -91,7 +93,7 @@ public class NoteEditActivity extends AppCompatActivity {
                     intent.setType("image/*");//相片类型
                     //setResult(REQUEST_CODE_PICK_IMAGE);
                     startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
-                }
+                }*/
 
                 /*Intent intent = new Intent(NoteEditActivity.this,GalleryActivity.class);
                 Note note = getEditNote();
@@ -193,7 +195,8 @@ public class NoteEditActivity extends AppCompatActivity {
                     freqTextView.setEnabled(false);
                     recallTextView.setEnabled(false);*/
                     //layoutStart.setVisibility(View.INVISIBLE);
-                    startTextView.setVisibility(View.INVISIBLE);
+                    //startTextView.setVisibility(View.INVISIBLE);
+                    startTextView.setVisibility(View.GONE);
                     endTextView.setVisibility(View.INVISIBLE);
                     freqTextView.setVisibility(View.INVISIBLE);
                     recallTextView.setVisibility(View.INVISIBLE);
@@ -221,6 +224,11 @@ public class NoteEditActivity extends AppCompatActivity {
             endTextView.setHint(note.getStartTime());
             freqTextView.setHint(note.getFrequency());
             recallTextView.setHint(note.getRecallTime());
+            if(note.getPathImg()!=""){
+                imageView = findViewById(R.id.image_note);
+                imageView.setVisibility(View.VISIBLE);
+                imageView.setImageURI(Uri.parse(note.getPathImg()));
+            }
         }
     }
 
@@ -288,9 +296,25 @@ public class NoteEditActivity extends AppCompatActivity {
         //startActivityForResult(intent,RESULT_OK);
     }
 
-    public void setTime(View v){
-        //getLayoutInflater().inflate(R.layout.dialog_choice_time, v,false);
-        Log.d("NoteEditActivity","onClick : opening dialog.");
+    public void changeImage(View v){
+        openGallery();
+    }
+
+    public void openGallery(){
+        if (ContextCompat.checkSelfPermission(NoteEditActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(NoteEditActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_CALL_PHONE2);
+
+        }else {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");//相片类型
+            //setResult(REQUEST_CODE_PICK_IMAGE);
+            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+        }
     }
 
     public void onActivityResult(int req, int res, Intent data) {

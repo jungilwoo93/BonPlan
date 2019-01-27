@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.R;
 
 import java.io.File;
@@ -193,8 +194,10 @@ public class GalleryActivity extends AppCompatActivity {
 
     public void validate(){
         Intent intent = new Intent(GalleryActivity.this,NoteEditActivity.class);
-        intent.putExtra("note",getIntent().getSerializableExtra("note"));
-        intent.putExtra("path",uri.toString());
+        Note note = (Note)getIntent().getSerializableExtra("note");
+        note.setPathImg(uri.toString());
+        intent.putExtra("note",note);
+        //intent.putExtra("path",uri.toString());
         startActivity(intent);
     }
 
@@ -202,7 +205,7 @@ public class GalleryActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
     {
 
-        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE)
+        /*if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE)
         {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
@@ -212,7 +215,7 @@ public class GalleryActivity extends AppCompatActivity {
                 // Permission Denied
                 Toast.makeText(GalleryActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
 
 
         /*if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE2)

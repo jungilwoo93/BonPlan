@@ -90,8 +90,8 @@ public class CameraActivity extends AppCompatActivity {
 
 
     private void bindViews() {
-        sfv_preview = (SurfaceView) findViewById(R.id.sfv_preview);
-        btn_take = (Button) findViewById(R.id.btn_take);
+        sfv_preview = findViewById(R.id.sfv_preview);
+        btn_take = findViewById(R.id.btn_take);
         sfv_preview.getHolder().addCallback(cpHolderCallback);
 
         btn_take.setOnClickListener(new View.OnClickListener() {
