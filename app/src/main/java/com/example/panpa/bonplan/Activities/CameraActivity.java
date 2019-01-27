@@ -2,12 +2,18 @@ package com.example.panpa.bonplan.Activities;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +28,11 @@ import android.widget.Toast;
 import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.R;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -99,6 +107,7 @@ public class CameraActivity extends AppCompatActivity {
         btn_take.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 camera.takePicture(null, null, new Camera.PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {
@@ -155,7 +164,17 @@ public class CameraActivity extends AppCompatActivity {
                         113);
 
             }else{
-                File file =createImageFile(bytes);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Bitmap bitmapRotate = rotateBitmapByDegree(bitmap,90);
+                bitmap.recycle();
+                ByteArrayOutputStream blob = new ByteArrayOutputStream();
+                bitmapRotate.compress(Bitmap.CompressFormat.PNG, 100 /* Ignored for PNGs */, blob);
+                bitmapRotate.recycle();
+                byte[] bitmapdata = blob.toByteArray();
+                /*int size = 960*1280;
+                ByteBuffer byteBuffer=ByteBuffer.allocate(size);
+                bitmapRotate.copyPixelsToBuffer(byteBuffer);*/
+                File file =createImageFile(bitmapdata);
                 return file.getAbsolutePath();
             }
 
@@ -172,12 +191,34 @@ public class CameraActivity extends AppCompatActivity {
         return "";
     }
 
+    public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
+        Bitmap returnBm = null;
+
+        // 根据旋转角度，生成旋转矩阵
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        try {
+            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
+        }
+        if (returnBm == null) {
+            returnBm = bm;
+        }
+
+        if (bm != null && bm != returnBm) {
+            bm.recycle();
+        }
+
+        return returnBm;
+    }
+
     private File createImageFile(byte[] bytes) throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = timeStamp + "_";
         //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File storageDir = getExternalFilesDir(Environment.getExternalStorageDirectory().getAbsolutePath());
+        //File storageDir = getExternalFilesDir(Environment.getExternalStorageDirectory().getAbsolutePath());
         String filePath =Environment.getExternalStorageDirectory()
                 .getAbsolutePath()
                 + "/"
@@ -196,6 +237,7 @@ public class CameraActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
         FileOutputStream fos = new FileOutputStream(image);
         fos.write(bytes);
         fos.flush();
@@ -213,8 +255,13 @@ public class CameraActivity extends AppCompatActivity {
     private void startPreview(){
         camera = Camera.open();
         try {
+
             camera.setPreviewDisplay(sfv_preview.getHolder());
             camera.setDisplayOrientation(90);   //tourner caméra 90 degré
+
+            /*Camera.Parameters mParameters = camera.getParameters();
+            mParameters.setPictureSize(960,1280);
+            camera.setParameters(mParameters);*/
             camera.startPreview();
         } catch (IOException e) {
             e.printStackTrace();
@@ -225,8 +272,6 @@ public class CameraActivity extends AppCompatActivity {
     private void stopPreview() {
         camera.stopPreview();
         camera.release();
-
-
         camera = null;
     }
 
