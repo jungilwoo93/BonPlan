@@ -104,7 +104,7 @@
                     android:focusableInTouchMode="false"
                     android:text="@string/dayEntier" />
 
-                <Switch
+                <CheckBox
                     android:id="@+id/wholeDay"
                     android:layout_width="40dp"
                     android:layout_height="20dp"
@@ -112,6 +112,7 @@
             </LinearLayout>
 
             <FrameLayout
+                android:id="@+id/layoutStartTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="55dp">

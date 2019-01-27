@@ -18,7 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +42,7 @@ public class NoteEditActivity extends AppCompatActivity {
     public TextView recallTextView;
     public EditText titleText;
     public EditText placeText;
-    public Switch wholeDay;
+    public CheckBox wholeDay;
     public EditText descriptionText;
     public Button imgButton;
     public Button cameraButton;
@@ -48,6 +51,7 @@ public class NoteEditActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PICK_IMAGE=3;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE2 = 7;
     private Uri uri;
+    public FrameLayout layoutStart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +72,7 @@ public class NoteEditActivity extends AppCompatActivity {
         });
         titleText = findViewById(R.id.title);
         placeText = findViewById(R.id.place);
-        wholeDay = findViewById(R.id.wholeDay);
+
         descriptionText= findViewById(R.id.description);
         imgButton = findViewById(R.id.image);
         imgButton.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +177,39 @@ public class NoteEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DialogRecall dialog = new DialogRecall();
                 dialog.show(getFragmentManager(),"DialogRecall");
+            }
+        });
+
+        layoutStart = findViewById(R.id.layoutStartTime);
+
+        wholeDay = findViewById(R.id.wholeDay);
+        wholeDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(compoundButton.isChecked()){
+                    Toast.makeText(NoteEditActivity.this,"Check".toString(),Toast.LENGTH_SHORT).show();
+                    /*startTextView.setEnabled(false);
+                    endTextView.setEnabled(false);
+                    freqTextView.setEnabled(false);
+                    recallTextView.setEnabled(false);*/
+                    //layoutStart.setVisibility(View.INVISIBLE);
+                    startTextView.setVisibility(View.INVISIBLE);
+                    endTextView.setVisibility(View.INVISIBLE);
+                    freqTextView.setVisibility(View.INVISIBLE);
+                    recallTextView.setVisibility(View.INVISIBLE);
+                }else{
+                    Toast.makeText(NoteEditActivity.this,"Uncheck".toString(),Toast.LENGTH_SHORT).show();
+                    /*startTextView.setEnabled(true);
+                    endTextView.setEnabled(true);
+                    freqTextView.setEnabled(true);
+                    recallTextView.setEnabled(true);*/
+                    startTextView.setVisibility(View.VISIBLE);
+                    endTextView.setVisibility(View.VISIBLE);
+                    freqTextView.setVisibility(View.VISIBLE);
+                    recallTextView.setVisibility(View.VISIBLE);
+                }
+
+
             }
         });
 
