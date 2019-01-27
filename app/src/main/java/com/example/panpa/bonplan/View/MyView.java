@@ -1,14 +1,24 @@
 package com.example.panpa.bonplan.View;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MyView extends View {
 
@@ -38,7 +48,7 @@ public class MyView extends View {
     private void init(){
         mPath = new Path();
         mPaint = new Paint();   //初始化画笔
-        mPaint.setColor(Color.GREEN);
+        mPaint.setColor(Color.BLACK);
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         mPaint.setStyle(Paint.Style.STROKE);
@@ -95,5 +105,37 @@ public class MyView extends View {
 
         invalidate();
         return true;
+    }
+
+    public File saveImgCanvas(){
+
+        Bitmap  bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        this.draw(canvas);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "sign_"+timeStamp;
+        String filePath =Environment.getExternalStorageDirectory()
+                .getAbsolutePath()
+                + "/"
+                + imageFileName
+                + ".png";
+        //File file = new File(Environment.getExternalStorageDirectory() + "/sign.png");
+        File file = new File(filePath);
+        if (!file.exists()) {// 如果文件不存在，就创建文件
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return file;
+
     }
 }

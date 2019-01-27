@@ -1,16 +1,28 @@
 package com.example.panpa.bonplan.Activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
+import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.R;
+import com.example.panpa.bonplan.View.MyView;
+
+import java.io.File;
 
 public class CanvasActivity extends AppCompatActivity {
-
+    private MyView view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,16 +31,45 @@ public class CanvasActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);//设置toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 给左上角图标的左边加上一个返回的图标。
+        view=findViewById(R.id.canvas);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if(menuItem.getItemId()==R.id.logoCheck){
                     //doValid();
+                    if (ContextCompat.checkSelfPermission(CanvasActivity.this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED
+                            &&ContextCompat.checkSelfPermission(CanvasActivity.this,
+                            Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
+                            != PackageManager.PERMISSION_GRANTED)
+                    {
+                        ActivityCompat.requestPermissions(CanvasActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                112);
+                        ActivityCompat.requestPermissions(CanvasActivity.this,
+                                new String[]{Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS},
+                                113);
+
+                    }else{
+                        File image = view.saveImgCanvas();
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        Uri contentUri = Uri.fromFile(image);
+                        mediaScanIntent.setData(contentUri);
+                        sendBroadcast(mediaScanIntent);
+                        Intent intent = new Intent(CanvasActivity.this,NoteEditActivity.class);
+                        Note note = (Note)getIntent().getSerializableExtra("note");
+                        note.setPathImg(image.getAbsolutePath());
+                        Toast.makeText(CanvasActivity.this,image.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+                        intent.putExtra("note",note);
+                        startActivity(intent);
+                    }
                 }
                 return true;
             }
         });
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
