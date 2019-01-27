@@ -50,22 +50,27 @@ public class NoteAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView=inflater.inflate(R.layout.list_item,null);
         }
+        Note note = get(position);
         NoteAdapter.ViewHolder viewHolder = new NoteAdapter.ViewHolder();
         viewHolder.startTime = convertView.findViewById(R.id.startTimeInList);
-
+        viewHolder.startTime.setText(note.getStartTime());
+        Toast.makeText(context,note.getStartTime(), Toast.LENGTH_SHORT).show();
         viewHolder.title = convertView.findViewById(R.id.titleInList);
+        viewHolder.title.setText(note.getTitle());
         viewHolder.switchValid = convertView.findViewById(R.id.valideNote);
         viewHolder.switchValid.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
             }
         });
         viewHolder.switchPost = convertView.findViewById(R.id.postponeNote);
         viewHolder.switchPost.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(context,"Button was clicked for list item "+ position, Toast.LENGTH_SHORT).show();
             }
         });
         return convertView;

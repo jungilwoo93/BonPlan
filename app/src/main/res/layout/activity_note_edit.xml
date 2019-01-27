@@ -136,7 +136,6 @@
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="13/01 12:30"
                     android:onClick="setTime"
                     android:textAlignment="textEnd"
                     android:textSize="20sp" />
@@ -167,7 +166,6 @@
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="15/01 12:30"
                     android:textAlignment="textEnd"
                     android:textSize="20sp" />
             </FrameLayout>

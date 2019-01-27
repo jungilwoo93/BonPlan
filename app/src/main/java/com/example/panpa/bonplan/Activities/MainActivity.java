@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 int position = data.getIntExtra("pos",-1);
                 adapter.set(position, ha);//probleme, comment trouver la position
                 adapter.notifyDataSetChanged();
+
             }else if(resultCode == RESULT_CANCELED){
 
             }
@@ -160,6 +161,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    public void putInfoInItem(Note note){
+
+    }
+
     /*private void generateListContent(){
         for(int i =0;i<55;i++){
             arrayList.add("This is row number " + i);
@@ -172,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return true;
     }
 
-    private class MyAdapterListView extends ArrayAdapter<Note> {
+    /*private class MyAdapterListView extends ArrayAdapter<Note> {
         private int layout; // 子项布局的ID
         //构造函数
         private MyAdapterListView(Context context,int resource, List<Note> objects){
@@ -228,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         public TextView title;
         public Switch switchValid;
         public Switch switchPost;
-    }
+    }*/
 
    /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

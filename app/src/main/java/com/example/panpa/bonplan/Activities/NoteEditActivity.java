@@ -27,6 +27,9 @@ import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.Plan.NoteAdapter;
 import com.example.panpa.bonplan.R;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class NoteEditActivity extends AppCompatActivity {
     private NoteAdapter adapter = new NoteAdapter(this);
     private static final String TAG = "NoteEditActivity";
@@ -54,6 +57,15 @@ public class NoteEditActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);//设置toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 给左上角图标的左边加上一个返回的图标。
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if(menuItem.getItemId()==R.id.logoCheck){
+                    doValid();
+                }
+                return true;
+            }
+        });
         titleText = findViewById(R.id.title);
         placeText = findViewById(R.id.place);
         wholeDay = findViewById(R.id.wholeDay);
@@ -115,40 +127,39 @@ public class NoteEditActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        titleText.setText(note.getTitle());
-        placeText.setText(note.getPlace());
-        descriptionText.setText(note.getDescrip());
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                if(menuItem.getItemId()==R.id.logoCheck){
-                    doValid();
-                }
-                return true;
-            }
-        });
+        Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month =cal.get(Calendar.MONTH);
+        int hour = cal.get(Calendar.HOUR);
+        int minu = cal.get(Calendar.MINUTE);
+        if(minu<30&&minu>=0){
+            minu=30;
+        }else{
+            hour+=1;
+            minu=00;
+        }
         startTextView= findViewById(R.id.startTextView);
-        startTextView.setText(note.getStartTime());
+        startTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
         startTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogTime dialog = new DialogTime();
+                dialog.setType(0);
                 dialog.show(getFragmentManager(),"DialogTime");
             }
         });
         endTextView= findViewById(R.id.endButton);
-        endTextView.setText(note.getStartTime());
+        endTextView.setHint(day + "/" + month + " " + hour+1 + ":" + minu);
         endTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogTime dialog = new DialogTime();
+                dialog.setType(1);
                 dialog.show(getFragmentManager(),"DialogTime");
             }
         });
 
         freqTextView = findViewById(R.id.frequancyButton);
-        freqTextView.setText(note.getStartTime());
         freqTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,7 +168,6 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
         recallTextView= findViewById(R.id.recallButton);
-        recallTextView.setText(note.getStartTime());
         recallTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,6 +176,15 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
 
+        if(note!=null){
+            titleText.setText(note.getTitle());
+            placeText.setText(note.getPlace());
+            descriptionText.setText(note.getDescrip());
+            startTextView.setHint(note.getStartTime());
+            endTextView.setHint(note.getStartTime());
+            freqTextView.setHint(note.getStartTime());
+            recallTextView.setHint(note.getStartTime());
+        }
     }
 
     @Override
@@ -187,10 +206,10 @@ public class NoteEditActivity extends AppCompatActivity {
     public Note getEditNote(){
         String title = this.titleText.getText().toString();
         String place = this.placeText.getText().toString();
-        String startTime = this.startTextView.getText().toString();
-        String endTime = this.endTextView.getText().toString();
-        String frequency = this.freqTextView.getText().toString();
-        String recallTime = this.recallTextView.getText().toString();
+        String startTime = this.startTextView.getHint().toString();
+        String endTime = this.endTextView.getHint().toString();
+        String frequency = this.freqTextView.getHint().toString();
+        String recallTime = this.recallTextView.getHint().toString();
         String descrip = this.descriptionText.getText().toString();
         String path = "";
         return new Note(title,place,startTime,endTime,frequency,recallTime,descrip,path);

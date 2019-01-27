@@ -26,6 +26,12 @@ public class DialogTime extends DialogFragment {
     private Spinner minutes;
     private Button actionOK;
     private Button actionCancel;
+    private int type; //0 start 1 end
+
+    public void setType(int type){
+        this.type=type;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState){
@@ -52,11 +58,12 @@ public class DialogTime extends DialogFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         hours.setAdapter(adapter);
         hours.setSelection(cal.get(Calendar.HOUR_OF_DAY));
-        ArrayList<String> listMinute = addDayOnSpinner();
+        ArrayList<String> listMinute = addMinuteOnSpinner();
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, listMinute);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        minutes.setAdapter(adapter);
-        minutes.setSelection(cal.get(Calendar.MINUTE)%5+cal.get(Calendar.MINUTE));
+        minutes.setAdapter(adapter3);
+        minutes.setSelection(0);
+        //minutes.setSelection(cal.get(Calendar.MINUTE)%5+cal.get(Calendar.MINUTE));
         /*ArrayList<String> listYears = addYearOnSpinner();
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, listYears);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -77,9 +84,19 @@ public class DialogTime extends DialogFragment {
                 String hour = hours.getSelectedItem().toString();
                 String minu = minutes.getSelectedItem().toString();
                 if(year==Integer.toString(Calendar.YEAR)){
-                    ((NoteEditActivity)getActivity()).startTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
+                    if (type == 0) {
+                        ((NoteEditActivity)getActivity()).startTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
+                    }else{
+                        ((NoteEditActivity)getActivity()).endTextView.setHint(day + "/" + month + " " + hour + ":" + minu);
+                    }
+
                 }else{
-                    ((NoteEditActivity)getActivity()).startTextView.setHint(day + "/" + month + "/" + year + " " + hour + ":" + minu);
+                    if (type == 0) {
+                        ((NoteEditActivity)getActivity()).startTextView.setHint(day + "/" + month + "/" + year + " " + hour + ":" + minu);
+                    }else{
+                        ((NoteEditActivity)getActivity()).endTextView.setHint(day + "/" + month + "/" + year + " " + hour + ":" + minu);
+                    }
+
                 }
                 //String input = "Bello";
                 //((NoteEditActivity)getActivity()).startTextView.setHint(input);
