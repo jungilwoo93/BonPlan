@@ -2,18 +2,15 @@ package com.example.panpa.bonplan.Activities;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,22 +21,19 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.R;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class CameraActivity extends AppCompatActivity {
-    private SurfaceView sfv_preview;
+    private SurfaceView sfv_preview; //pour afficher le view de camera
     private Button btn_take;
     private Camera camera = null;
     private Note note;
@@ -64,79 +58,50 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        //note = new Note("coucou","maison","10:00","12:00","1fois","10 mins avant","bello","");
-        //note = getIntent().getParcelableExtra("note");
         note = (Note)getIntent().getSerializableExtra("note");
         bindViews();
     }
-    // need to give android.hardware.Camera permission programmatically.
-    //MANIFEST PERMISSIONS WON'T WORK on Android 6
+    //need to give android.hardware.Camera permission programmatically.
+    //MANIFEST PERMISSIONS WON'T WORK after Android 6.0
     @Override
     protected void onStart() {
         super.onStart();
-
+        //permission pour utiliser camera de téléphone
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
             int hasCameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
-            //int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             List<String> permissions = new ArrayList<String>();
-
             if (hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.CAMERA);
                 //user granted your permission
             }
-            /*if(hasWritePermission!= PackageManager.PERMISSION_GRANTED){
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }*/
             if (!permissions.isEmpty()) {
                 requestPermissions(permissions.toArray(new String[permissions.size()]), 111);
                 //user denied your permission
             }
         }
-
-
     }
 
-
-
+    //initialiser la page CameraActivity
     private void bindViews() {
         sfv_preview = findViewById(R.id.sfv_preview);
-        btn_take = findViewById(R.id.btn_take);
+        btn_take = findViewById(R.id.btn_take); //
         sfv_preview.getHolder().addCallback(cpHolderCallback);
 
         btn_take.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 camera.takePicture(null, null, new Camera.PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {
                         Intent it = new Intent(CameraActivity.this, PreviewActivity.class);
                         String path = "";
                         if ((path = saveFile(data)) != null) {
-
-                            //Bundle bundle=new Bundle();
-                            //bundle.putString("path", path);
-                            //bundle.putParcelable("note",note);                            //bundle.putInt("age", 24);
-                            //附带上额外的数据
-                            //it.putExtras(bundle);
-
                             Note newNote= new Note(note.getTitle(),note.getPlace(),note.getStartTime(),note.getEndTime(),note.getFrequency(),note.getRecallTime(),note.getDescrip(),path);
-                            newNote.setPathImg(path);
-
+                            newNote.setPathImg(path); //mettre le chemin de fichier de photo dans la note pour qu'on puisse utiliser dans les autres activities.
                             it.putExtra("note",newNote);
-                            //it.putExtra("path", path);
-                            //ArrayList<String> path1 = new ArrayList<>();
-                            //path1.add(path);
-                            //it.putStringArrayListExtra("path",path1);
-                            Toast.makeText(CameraActivity.this, newNote.getPathImg(), Toast.LENGTH_SHORT).show();
-
-                            //startActivityForResult(it,200);
-                            //startActivity(it);
                         } else {
                             Toast.makeText(CameraActivity.this, "fail to save photo", Toast.LENGTH_SHORT).show();
                         }
-
                         startActivity(it);
                     }
                 });
@@ -144,11 +109,10 @@ public class CameraActivity extends AppCompatActivity {
         });
     }
 
-    //保存临时文件的方法
+    //enregister la photo qu'on a pris
     private String saveFile(byte[] bytes){
         try {
-            /*String pathStockage = Environment.getExternalStorageDirectory().toString();
-            File fileTempo = File.createTempFile("img","");*/
+            //demander la permission pour ecrire/créer les fichiers et afficher la photo sur Gallerie
             if (ContextCompat.checkSelfPermission(CameraActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED
@@ -165,25 +129,15 @@ public class CameraActivity extends AppCompatActivity {
 
             }else{
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                Bitmap bitmapRotate = rotateBitmapByDegree(bitmap,90);
+                Bitmap bitmapRotate = rotateBitmapByDegree(bitmap,90); //la photo qu'on a pris, elle a pas une bonne orientation.
                 bitmap.recycle();
                 ByteArrayOutputStream blob = new ByteArrayOutputStream();
                 bitmapRotate.compress(Bitmap.CompressFormat.PNG, 100 /* Ignored for PNGs */, blob);
                 bitmapRotate.recycle();
                 byte[] bitmapdata = blob.toByteArray();
-                /*int size = 960*1280;
-                ByteBuffer byteBuffer=ByteBuffer.allocate(size);
-                bitmapRotate.copyPixelsToBuffer(byteBuffer);*/
                 File file =createImageFile(bitmapdata);
                 return file.getAbsolutePath();
             }
-
-            /*File file = new File("image.png");
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bytes);
-            fos.flush();
-            fos.close();*/
             return null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -193,12 +147,11 @@ public class CameraActivity extends AppCompatActivity {
 
     public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
         Bitmap returnBm = null;
-
-        // 根据旋转角度，生成旋转矩阵
+        // selon degrée, initialiser matrix pour la rotation
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         try {
-            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            // image orinale fait la rotation selon matrise, et obtenir la nouvelle image
             returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
         } catch (OutOfMemoryError e) {
         }
@@ -217,20 +170,13 @@ public class CameraActivity extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = timeStamp + "_";
-        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        //File storageDir = getExternalFilesDir(Environment.getExternalStorageDirectory().getAbsolutePath());
-        String filePath =Environment.getExternalStorageDirectory()
+        String filePath =Environment.getExternalStorageDirectory() //path stockage
                 .getAbsolutePath()
                 + "/"
                 + imageFileName
                 + ".png";
-        /*File image = File.createTempFile(
-                imageFileName,  /* prefix */
-               // ".png",         /* suffix */
-               // storageDir      /* directory */
-       // );
         File image = new File(filePath);
-        if (!image.exists()) {// 如果文件不存在，就创建文件
+        if (!image.exists()) {// s'il existe pas, créer un nouveau
             try {
                 image.createNewFile();
             } catch (IOException e) {
@@ -242,51 +188,32 @@ public class CameraActivity extends AppCompatActivity {
         fos.write(bytes);
         fos.flush();
         fos.close();
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE); // pour afficher la photo sur Gallerie
         Uri contentUri = Uri.fromFile(image);
         mediaScanIntent.setData(contentUri);
         sendBroadcast(mediaScanIntent);
-        // Save a file: path for use with ACTION_VIEW intents
         return image;
     }
 
 
-    //开始预览
+    //démarrer le caméra
     private void startPreview(){
         camera = Camera.open();
         try {
-
             camera.setPreviewDisplay(sfv_preview.getHolder());
-            camera.setDisplayOrientation(90);   //tourner caméra 90 degré
-
-            /*Camera.Parameters mParameters = camera.getParameters();
-            mParameters.setPictureSize(960,1280);
-            camera.setParameters(mParameters);*/
+            camera.setDisplayOrientation(90);   //tourner caméra 90 degré, parce qu'il a pas une bonne orientation
             camera.startPreview();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //stop Preview
+    //fermer le caméro obligatoire, oublie pas!
     private void stopPreview() {
         camera.stopPreview();
         camera.release();
         camera = null;
     }
-
-    /*protected void onActivityResult(int requestCode,int resultCode,Intent data){
-        if(requestCode==200) {
-            if (resultCode == RESULT_OK) {
-                Note ha = (Note) data.getParcelableExtra("note");//récuperer le contact
-                //Toast.makeText(this,ha.getNom(),Toast.LENGTH_SHORT).show();
-                String position = data.getStringExtra("path");
-            } else if (resultCode == RESULT_CANCELED) {
-
-            }
-        }
-
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
