@@ -20,40 +20,39 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyView extends View {
+public class CanvasView extends View {
 
-    private Paint mPaint;  //绘制线条的Path
-    private Path mPath;      //记录用户绘制的Path
-    private Canvas mCanvas;  //内存中创建的Canvas
-    private Bitmap mBitmap;  //缓存绘制的内容
-
+    private Paint mPaint;    //绘制线条的Path
+    private Path mPath;      //记录用户绘制的Path //noter le path que l'utilisateur designe
+    private Canvas mCanvas;  //内存中创建的Canvas // créer un canvas
+    private Bitmap mBitmap;  //缓存绘制的内容 //mettre ce qu'on designe
     private int mLastX;
     private int mLastY;
 
-    public MyView(Context context) {
+    public CanvasView(Context context) {
         super(context);
         init();
     }
 
-    public MyView(Context context, AttributeSet attrs) {
+    public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CanvasView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     private void init(){
         mPath = new Path();
-        mPaint = new Paint();   //初始化画笔
+        mPaint = new Paint();   //初始化画笔 initialiser le Paint pour designer
         mPaint.setColor(Color.BLACK);
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND); //结合处为圆角
-        mPaint.setStrokeCap(Paint.Cap.ROUND); // 设置转弯处为圆角
+        mPaint.setStrokeJoin(Paint.Join.ROUND); //Set the paint's Join //结合处为圆角
+        mPaint.setStrokeCap(Paint.Cap.ROUND); //Set the paint's Cap and The outer edges of a join meet in a circular arc // 设置转弯处为圆角
         mPaint.setStrokeWidth(20);   // 设置画笔宽度
     }
 
@@ -62,30 +61,28 @@ public class MyView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
-        // 初始化bitmap,Canvas
+        // initialiser bitmap,Canvas
         mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
     }
 
-    //重写该方法，在这里绘图
+    //ici pour designer
     @Override
     protected void onDraw(Canvas canvas) {
         drawPath();
         canvas.drawBitmap(mBitmap, 0, 0, null);
     }
 
-    //绘制线条
+    //le stylo designe
     private void drawPath(){
         mCanvas.drawPath(mPath, mPaint);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         int action = event.getAction();
         int x = (int) event.getX();
         int y = (int) event.getY();
-
         switch (action)
         {
             case MotionEvent.ACTION_DOWN:
@@ -102,13 +99,12 @@ public class MyView extends View {
                 mLastY = y;
                 break;
         }
-
+        //invalidate() means 'redraw on screen' and results to a call of the view's onDraw() method like repaint in Java
         invalidate();
         return true;
     }
 
     public File saveImgCanvas(){
-
         Bitmap  bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         this.draw(canvas);
@@ -119,9 +115,8 @@ public class MyView extends View {
                 + "/"
                 + imageFileName
                 + ".png";
-        //File file = new File(Environment.getExternalStorageDirectory() + "/sign.png");
         File file = new File(filePath);
-        if (!file.exists()) {// 如果文件不存在，就创建文件
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -133,9 +128,6 @@ public class MyView extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return file;
-
     }
 }

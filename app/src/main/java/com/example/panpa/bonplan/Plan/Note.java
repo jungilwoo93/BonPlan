@@ -2,7 +2,6 @@ package com.example.panpa.bonplan.Plan;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.io.Serializable;
 
 public class Note implements Serializable {
@@ -15,17 +14,6 @@ public class Note implements Serializable {
     private String descrip;
     private String pathImg;
     private String pathAudio="";
-    //private ArrayList<Bitmap> images =new ArrayList<>();
-
-    /*public Note(String title,String place, String startTime, String endTime, String frequency, String recallTime, String descrip){
-        this.title=title;
-        this.place=place;
-        this.startTime=startTime;
-        this.endTime=endTime;
-        this.frequency=frequency;
-        this.recallTime=recallTime;
-        this.descrip=descrip;
-    }*/
 
     public Note(String title,String place, String startTime, String endTime, String frequency, String recallTime, String descrip,String pathImg){
         this.title=title;
@@ -38,7 +26,7 @@ public class Note implements Serializable {
         this.pathImg=pathImg;
     }
 
-    protected Note(Parcel in) {
+    /*protected Note(Parcel in) {
         this.title=in.readString();
         this.place=in.readString();
         this.startTime=in.readString();
@@ -47,7 +35,7 @@ public class Note implements Serializable {
         this.recallTime=in.readString();
         this.descrip=in.readString();
         this.pathImg=in.readString();
-    }
+    }*/
 
     public String getTitle() {
         return title;

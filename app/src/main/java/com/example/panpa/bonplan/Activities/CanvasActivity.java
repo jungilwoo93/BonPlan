@@ -3,7 +3,6 @@ package com.example.panpa.bonplan.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -12,17 +11,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.R;
-import com.example.panpa.bonplan.View.MyView;
+import com.example.panpa.bonplan.View.CanvasView;
 
 import java.io.File;
 
 public class CanvasActivity extends AppCompatActivity {
-    private MyView view;
+    private CanvasView view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

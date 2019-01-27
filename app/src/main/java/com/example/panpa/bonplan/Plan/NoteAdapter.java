@@ -3,7 +3,6 @@ package com.example.panpa.bonplan.Plan;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +28,10 @@ public class NoteAdapter extends BaseAdapter {
     private Context context;
     private AlertDialog alert = null;
     private AlertDialog.Builder builder = null;
+    private NoteAdapter.ViewHolder viewHolder;
+    private Note note;
 
     public NoteAdapter(Context cont){
-        //this.note=n;
         this.context=cont;
     }
 
@@ -53,17 +52,14 @@ public class NoteAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position,View convertView, ViewGroup parent) {
-        //Note note = getItem(position);
-        //MainActivity.ViewHolder mainViewHolder = null;
         if(convertView== null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView=inflater.inflate(R.layout.list_item,null);
         }
-        final Note note = get(position);
-        final NoteAdapter.ViewHolder viewHolder = new NoteAdapter.ViewHolder();
+        note = get(position);
+        viewHolder = new NoteAdapter.ViewHolder();
         viewHolder.startTime = convertView.findViewById(R.id.startTimeInList);
         viewHolder.startTime.setText(note.getStartTime());
-        //Toast.makeText(context,note.getStartTime(), Toast.LENGTH_SHORT).show();
         viewHolder.title = convertView.findViewById(R.id.titleInList);
         viewHolder.title.setText(note.getTitle());
         viewHolder.switchValid = convertView.findViewById(R.id.valideNote);
@@ -79,7 +75,6 @@ public class NoteAdapter extends BaseAdapter {
         viewHolder.switchPost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //Intent intent = new Intent();
                 alert = null;
                 builder = new AlertDialog.Builder(context);
                 alert = builder
@@ -107,9 +102,6 @@ public class NoteAdapter extends BaseAdapter {
         });
         return convertView;
     }
-
-
-
 
     public boolean add(Note object) {
         return listNote.add(object);
