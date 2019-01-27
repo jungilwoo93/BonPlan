@@ -1,6 +1,8 @@
 package com.example.panpa.bonplan.Plan;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -26,6 +28,8 @@ import java.util.ListIterator;
 public class NoteAdapter extends BaseAdapter {
     private ArrayList<Note> listNote = new ArrayList<>();
     private Context context;
+    private AlertDialog alert = null;
+    private AlertDialog.Builder builder = null;
 
     public NoteAdapter(Context cont){
         //this.note=n;
@@ -55,7 +59,7 @@ public class NoteAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView=inflater.inflate(R.layout.list_item,null);
         }
-        Note note = get(position);
+        final Note note = get(position);
         final NoteAdapter.ViewHolder viewHolder = new NoteAdapter.ViewHolder();
         viewHolder.startTime = convertView.findViewById(R.id.startTimeInList);
         viewHolder.startTime.setText(note.getStartTime());
@@ -76,6 +80,28 @@ public class NoteAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 //Intent intent = new Intent();
+                alert = null;
+                builder = new AlertDialog.Builder(context);
+                alert = builder
+                        .setTitle("Allert：")
+                        .setMessage("Do you want to delete this note ?")
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context, "Cancel~", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                listNote.remove(note);
+                                Toast.makeText(context, "You delete this note.", Toast.LENGTH_SHORT).show();
+                                notifyDataSetChanged();
+
+                            }
+                        })
+                        .create();             //create AlertDialog
+                alert.show();                    //afficher dialog
                 if(compoundButton.isChecked()) Toast.makeText(context,compoundButton.getText().toString(),Toast.LENGTH_SHORT).show();
             }
         });
