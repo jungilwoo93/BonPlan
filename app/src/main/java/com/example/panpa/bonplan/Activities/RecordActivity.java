@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -16,13 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.panpa.bonplan.Plan.Note;
 import com.example.panpa.bonplan.R;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,7 +38,7 @@ public class RecordActivity extends AppCompatActivity {
     private MediaPlayer mAudioPlayer;
     private TextView text_timer;
     private int seconds;
-    private int MAXTIME = 50000;
+    private int MAXTIME = 50000; //50secondes
     private String filePath;
     private Note note;
 
@@ -55,9 +50,9 @@ public class RecordActivity extends AppCompatActivity {
         filePath = note.getPathAudio();
         btn_control = findViewById(R.id.btn_control);
         if(filePath!=""){
-            btn_control.setVisibility(View.INVISIBLE);
+            btn_control.setVisibility(View.INVISIBLE); //juste pour écouter l'audio
         }else{
-            btn_control.setVisibility(View.VISIBLE);
+            btn_control.setVisibility(View.VISIBLE); //pour faire l'audio
         }
         progressBar = findViewById(R.id.progressBar);
         btn_play = findViewById(R.id.button_play);
@@ -74,11 +69,11 @@ public class RecordActivity extends AppCompatActivity {
                     } else {
                         startRecord();
                     }
-                    btn_control.setText("停止录制");
+                    btn_control.setText("Stop Record");
                     isRecord = true;
                 }else{
                     stopRecord();
-                    btn_control.setText("重新录制");
+                    btn_control.setText("Re record");
                     isRecord = false;
                 }
             }
@@ -102,11 +97,11 @@ public class RecordActivity extends AppCompatActivity {
                     } else {
                         startPlay();
                     }
-                    btn_play.setText("停止播放");
+                    btn_play.setText("Stop play");
                     isPlay = true;
                 }else{
                     stopPlay();
-                    btn_play.setText("开始播放");
+                    btn_play.setText("Play");
                     isPlay = false;
                 }
             }
@@ -123,7 +118,34 @@ public class RecordActivity extends AppCompatActivity {
         });
 
     }
-    //开始录制
+
+    private void createRecordFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String soundFileName = "Record"+timeStamp;
+        File storageDir = new File(Environment.getExternalStorageDirectory(),"sounds");
+        if(!storageDir.exists()){
+            storageDir.mkdirs();
+        }
+        File sound = new File(storageDir,soundFileName+".amr");
+        if(!sound.exists()){
+            sound.createNewFile();
+        }
+        mr = new MediaRecorder();
+        mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //source de l'autdio
+        mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //format pour sortie
+        mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //format pour encoder
+        mr.setOutputFile(sound.getAbsolutePath());
+        try {
+            mr.prepare();
+            mr.start(); //démarrer l'enregistrement
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.filePath = sound.getAbsolutePath();
+    }
+
+    //commencer à enregistrer l'audio
     private void startRecord(){
         if(mr == null){
             try {
@@ -146,39 +168,14 @@ public class RecordActivity extends AppCompatActivity {
                 }else {
                     createRecordFile();
                 }
-                showProgressforRecording();
+                progressforRecording();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            /*File dir = new File(Environment.getExternalStorageDirectory(),"sounds");
-            if(!dir.exists()){
-                dir.mkdirs();
-            }
-            File soundFile = new File(dir,System.currentTimeMillis()+".amr");
-            if(!soundFile.exists()){
-                try {
-                    soundFile.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            mr = new MediaRecorder();
-            mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
-            mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式
-            mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //设置编码格式
-            mr.setOutputFile(soundFile.getAbsolutePath());
-            try {
-                mr.prepare();
-                mr.start();  //开始录制
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
         }
     }
 
-    //停止录制，资源释放
+    //terminier l'enregistrement, et libérer les ressources
     private void stopRecord(){
         if(mr != null){
             mr.stop();
@@ -187,43 +184,9 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
-    private void createRecordFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String soundFileName = "Record"+timeStamp;
-        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-        File storageDir = new File(Environment.getExternalStorageDirectory(),"sounds");
-        if(!storageDir.exists()){
-            storageDir.mkdirs();
-        }
-        File sound = new File(storageDir,soundFileName+".amr");
-        if(!sound.exists()){
-            sound.createNewFile();
-        }
-        //File sound = File.createTempFile(
-        //        soundFileName,  /* prefix */
-         //       ".amr",         /* suffix */
-         //       storageDir      /* directory */
-        //);
-        mr = new MediaRecorder();
-        mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
-        mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式
-        mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //设置编码格式
-        mr.setOutputFile(sound.getAbsolutePath());
-        try {
-            mr.prepare();
-            //updatingPlyingProgressBar();
-            mr.start();  //开始录制
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.filePath = sound.getAbsolutePath();
-        Toast.makeText(RecordActivity.this,sound.getAbsolutePath(),Toast.LENGTH_SHORT).show();
-        // Save a file: path for use with ACTION_VIEW intents
-        //return sound;
-    }
 
-    private void showProgressforRecording() {
+
+    private void progressforRecording() {
         seconds = 0;
         mRecordingtimer = new Timer();
         mRecordingtimer.schedule(new TimerTask() {
@@ -252,9 +215,9 @@ public class RecordActivity extends AppCompatActivity {
         try {
             mAudioPlayer.setDataSource(this, Uri.parse(filePath));
             mAudioPlayer.prepare();
-            updatingPlyingProgressBar();
+            updatePlayingProgressBar();
             mAudioPlayer.start();
-            showProgressforPlaying();
+            progressforPlaying();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -267,7 +230,7 @@ public class RecordActivity extends AppCompatActivity {
         });
     }
 
-    private void updatingPlyingProgressBar() {
+    private void updatePlayingProgressBar() {
 
         long maxTime = mAudioPlayer.getDuration();
         int second = (int) maxTime / 1000;
@@ -276,7 +239,7 @@ public class RecordActivity extends AppCompatActivity {
         text_timer.setText(second > 9 ? "00:" + second : "00:0" + second);
     }
 
-    private void showProgressforPlaying() {
+    private void progressforPlaying() {
         seconds = 0;
         mPlayingTimer = new Timer();
         mPlayingTimer.schedule(new TimerTask() {

@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/progressBar"
         android:layout_marginTop="175dp"
-        android:text="开始录音"
+        android:text="@string/startRecord"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="168dp" />
 
@@ -33,10 +33,9 @@
         android:id="@+id/button_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/btn_control"
-        android:layout_marginStart="99dp"
-        android:text="Play" />
+        android:layout_toEndOf="@+id/btn_control"
+        android:text="@string/play" />
 
     <Button
         android:id="@+id/btn_cancel"
@@ -57,8 +56,7 @@
         android:id="@+id/btn_validate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btn_control"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="100dp"
+        android:layout_alignTop="@+id/btn_control"
+        android:layout_toStartOf="@+id/btn_cancel"
         android:text="@string/validate" />
 </RelativeLayout>

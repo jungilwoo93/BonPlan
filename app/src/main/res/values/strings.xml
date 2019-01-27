@@ -21,6 +21,7 @@
     <string name="cancel">Cancel</string>
     <string name="play">Play</string>
     <string name="validate">Validate</string>
+    <string name="startRecord">Start Record</string>
     <!--<string-array name="months">
         <item>Janvier</item>
         <item>Février</item>
